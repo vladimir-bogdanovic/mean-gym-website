@@ -1,0 +1,26 @@
+@import "../../../main-styles.scss";
+
+.footer-container {
+  display: flex;
+  width: 100%;
+  background-color: $primary;
+  height: 70px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+
+  .footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .item {
+    margin: 0 20px;
+  }
+}

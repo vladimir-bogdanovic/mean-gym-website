@@ -1,0 +1,19 @@
+@import "../../../main-styles.scss";
+
+.field {
+  padding: 12px;
+}
+
+.buttons {
+  padding-top: 24px;
+}
+
+.auth-redirection-text {
+  margin-top: 10px;
+  width: 300px;
+
+  span {
+    color: $link-color;
+    cursor: pointer;
+  }
+}

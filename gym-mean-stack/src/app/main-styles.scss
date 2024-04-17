@@ -1,0 +1,49 @@
+$dark-blue: #0a369d;
+$blue: #4472ca;
+$light-blue: #92b4f4;
+$purple-blue: #5e7ce2;
+
+$light: #cfdee7;
+
+$primary: $blue;
+$link-color: $dark-blue;
+
+$control-border-width: 2px;
+$input-border-color: transparent;
+$input-shadow: none;
+
+html {
+  background: linear-gradient(to right top, $purple-blue, $light-blue);
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.centered-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+}
+
+.title {
+  // font-family: "later";
+  font-size: 24px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 20px;
+}
+
+.white-box {
+  padding: 35px;
+  background: white;
+  border-radius: 5px;
+  margin-bottom: 140px;
+}

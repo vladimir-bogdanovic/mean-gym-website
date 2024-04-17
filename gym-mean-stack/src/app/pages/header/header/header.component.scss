@@ -1,0 +1,31 @@
+@import "../../../main-styles.scss";
+
+.header-container {
+  display: flex;
+  width: 100%;
+  background-color: $primary;
+  height: 70px;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  .navigation-container {
+    max-width: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-grow: 1;
+  }
+
+  .auth-container {
+    width: 200px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
