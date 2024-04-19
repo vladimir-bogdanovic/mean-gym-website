@@ -8,6 +8,7 @@ const mongoose = require("./db/mongoose");
 const jwt = require("jsonwebtoken");
 
 const { User } = require("./db/models/user.model");
+const { Program } = require("./db/models/program.model");
 
 // enable cors
 app.use(function (req, res, next) {
@@ -151,6 +152,34 @@ app.get("/users/me/access-token", verifySession, (req, res) => {
   // .catch((e) => {
   //   res.status(400).send(e);
   // });
+});
+
+/// PROGRAMS ROUTES
+
+app.post("/programs", authenticate, (req, res) => {
+  let title = req.body.title;
+
+  let newTitle = new Program({
+    title: title,
+    _userId: req.user_id,
+  });
+  newTitle.save().then((program) => {
+    res.send(program);
+    res.send(console.log(title, newTitle));
+  });
+});
+
+app.get("/programs", authenticate, (req, res) => {
+  Program.find({
+    _userId: req.user_id,
+  })
+    .then((program) => {
+      res.send(program);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send("An error occurred while fetching programs.");
+    });
 });
 
 //LISTENING
