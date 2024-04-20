@@ -17,9 +17,12 @@ export class LoginComponent {
   }
 
   login(email: string, password: string) {
-    this.authService.login(email, password).subscribe((user) => {
-      console.log(user);
-      console.log('login successfull');
+    this.authService.login(email, password).subscribe((resUser) => {
+      if (resUser.status === 200) {
+        this.router.navigate(['programs']);
+      } else {
+        alert('Wrong email or password!!!');
+      }
     });
   }
 }

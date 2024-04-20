@@ -10,6 +10,8 @@ const jwt = require("jsonwebtoken");
 const { User } = require("./db/models/user.model");
 const { Program } = require("./db/models/program.model");
 
+const jwtSecret = process.env.JWT_SECRET;
+
 // enable cors
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -32,7 +34,7 @@ app.use(function (req, res, next) {
 
 let authenticate = (req, res, next) => {
   let token = req.header("x-access-token");
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+  jwt.verify(token, jwtSecret, (err, decoded) => {
     if (err) {
       res.status(401).send(err);
     } else {
@@ -181,6 +183,8 @@ app.get("/programs", authenticate, (req, res) => {
       res.status(500).send("An error occurred while fetching programs.");
     });
 });
+
+/// MG's ROUTES
 
 //LISTENING
 app.listen(3000, () => {

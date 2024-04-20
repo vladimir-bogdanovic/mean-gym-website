@@ -55,7 +55,7 @@ export class RequestInterceptor implements HttpInterceptor {
   }
 
   refreshAccessToken() {
-    // this.refreshingAccessToken = true;
+    this.refreshingAccessToken = true;
     return this.authService.getNewAccessToken().pipe(
       tap(() => {
         console.log('access token refreshed');
