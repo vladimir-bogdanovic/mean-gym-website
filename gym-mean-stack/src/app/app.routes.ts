@@ -4,6 +4,7 @@ import { SignupComponent } from './pages/auth/signup/signup.component';
 import { LoginComponent } from './pages/auth/login/login.component';
 import { ProgramViewComponent } from './pages/programs/program-view/program-view.component';
 import { NewProgramComponent } from './pages/programs/new-program/new-program.component';
+import { NewMuscleGroupComponent } from './pages/programs/new-muscle-group/new-muscle-group.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -11,8 +12,14 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'programs', component: ProgramsPageComponent },
   {
-    path: 'programs/:programsId/program-view',
+    path: 'programs/:programId/mg-lists',
     component: ProgramViewComponent,
   },
   { path: 'new-program', component: NewProgramComponent },
+  {
+    path: 'programs/:programId/new-muscle-group',
+    component: NewMuscleGroupComponent,
+  },
 ];
+
+////////////reci unutar ruta odvoj  sa "-"

@@ -1,1 +1,86 @@
-<p>program-view works!</p>
+<div class="page-wrapper">
+  <div class="program-content">
+    <div class="sidebar has-background-white">
+      <h1 class="title has-text-primary">List</h1>
+      <div class="lsit-menu">
+        <a
+          *ngFor="let muscleGroup of muscleGroups"
+          class="list-menu-item"
+          routerLinkActive="is-active"
+        >
+          <p>{{ muscleGroup.title }}</p>
+        </a>
+      </div>
+
+      <button
+        (click)="createNewMucleGroup()"
+        class="button is-primary has-text-white"
+      >
+        + New List
+      </button>
+    </div>
+    <!-- EXERCISES START -->
+
+    <div class="tasks-list-container has-background-light">
+      <div class="top-bar">
+        <h1 class="title has-text-primary">Tasks</h1>
+        <div class="dropdown is-hoverable is-right">
+          <div class="dropdown-trigger">
+            <button
+              class="button"
+              aria-haspopup="true"
+              aria-controls="dropdown-menu4"
+            >
+              <span class="icon is-small">
+                <i class="fas fa-cog" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+          <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+            <div class="dropdown-content">
+              <a class="dropdown-item"> Edit </a>
+              <a class="dropdown-item has-text-danger"> Delete </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="tasks">
+        <div
+          class="task"
+          *ngFor="let task of tasks"
+          [ngClass]="{ completed: task.completed }"
+        >
+          <div class="task-text">
+            {{ task.title }}
+          </div>
+          <div class="task-buttons">
+            <button class="button">
+              <div class="icon">
+                <i class="fas fa-edit"></i>
+              </div>
+            </button>
+
+            <button class="button is-danger" style="margin-left: 10px">
+              <div class="icon">
+                <i class="fas fa-trash"></i>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+      <h3 class="no-content-title" *ngIf="tasks?.length === 0">
+        There are no tasks here! Click the add button to create a new task.
+      </h3>
+      <h3 class="no-content-title" *ngIf="!tasks">Choose list in sidebar.</h3>
+
+      <button
+        routerLink="./new-task"
+        class="circle-add-button button is-primary"
+      >
+        +
+      </button>
+    </div>
+    <!-- 
+  EXERCISES END -->
+  </div>
+</div>

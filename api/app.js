@@ -9,6 +9,8 @@ const jwt = require("jsonwebtoken");
 
 const { User } = require("./db/models/user.model");
 const { Program } = require("./db/models/program.model");
+const { MuscleGroup } = require("./db/models/muscle-group.model");
+const { Exercise } = require("./db/models/exercise.model");
 
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -185,6 +187,116 @@ app.get("/programs", authenticate, (req, res) => {
 });
 
 /// MG's ROUTES
+
+app.post("/programs/:programsId/mg-lists", authenticate, (req, res) => {
+  Program.findOne({
+    _id: req.params.programsId,
+    _userId: req.user_id,
+  })
+    .then((program) => {
+      if (program) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .then((canCreateList) => {
+      if (canCreateList) {
+        let newList = new MuscleGroup({
+          title: req.body.title,
+          _programId: req.params.programsId,
+        });
+
+        newList.save().then((newList) => {
+          res.send(newList);
+        });
+      } else {
+        res.sendStatus(404);
+      }
+    });
+});
+
+app.get("/programs/:programsId/mg-lists", authenticate, (req, res) => {
+  MuscleGroup.find({ _programId: req.params.programsId })
+    .then((muscleGroup) => {
+      res.send(muscleGroup);
+    })
+    .catch((err) => {
+      console.log(`this is Response error : ${err}`);
+    });
+});
+
+/// EXERCISES ROUTES
+
+app.post(
+  "/programs/:programsId/mg-lists/:mgListId/exercises",
+  authenticate,
+  async (req, res) => {
+    try {
+      const program = await Program.findOne({
+        _id: req.params.programsId,
+        _userId: req.user_id,
+      });
+      if (!program) {
+        res.status(404).send("Program notddd found");
+        return;
+      }
+
+      const mgList = await MuscleGroup.findOne({
+        _id: req.params.mgListId,
+        _programId: req.params.programsId,
+      });
+      if (!mgList) {
+        res.status(404).send("Muscle group not found");
+        return;
+      }
+
+      const newExercise = new Exercise({
+        title: req.body.title,
+        _muscleId: req.params.mgListId,
+      });
+
+      const savedExercise = await newExercise.save();
+      res.send(savedExercise);
+    } catch (error) {
+      console.error("Error:", error);
+      res.status(500).send("Internal server error");
+    }
+  }
+);
+
+// app.post("/programs/:programsId/mg-lists/:mgListId/exercises", (req, res) => {
+//   Program.findOne({ _id: req.params.programsId, _userId: req._userId })
+//     .then((program) => {
+//       if (program) {
+//         return true;
+//       } else {
+//         res.status(404).send("Program not found");
+//         return;
+//       }
+//     })
+//     .then((mgList) => {
+//       if (mgList) {
+//         MuscleGroup.findOne({
+//           _id: req.params.mgListId,
+//           _programId: req.params.programsId,
+//         }).then((canCreateExercise) => {
+//           if (canCreateExercise) {
+//             let newExersice = new Exercise({
+//               title: req.body.title,
+//               _muscleId: req.params.mgListId,
+//             });
+
+//             newExersice.save().then((newExer) => {
+//               res.send(newExer);
+//             });
+//           }
+//         });
+//       } else {
+//         res.status(404);
+//       }
+//     });
+// });
 
 //LISTENING
 app.listen(3000, () => {

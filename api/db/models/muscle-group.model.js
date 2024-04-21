@@ -14,5 +14,5 @@ const muscleSchema = new mongoose.Schema({
   },
 });
 
-const Muscle = mongoose.model("Program", muscleSchema);
-module.exports = { Muscle };
+const MuscleGroup = mongoose.model("MuscleGroup", muscleSchema);
+module.exports = { MuscleGroup };

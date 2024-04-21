@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RequestsService } from '../../../services/requests.service';
-import { ProgramInterface } from '../../../models/program-model';
+import { ProgramInterface } from '../../../models/program.model';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
@@ -24,7 +24,7 @@ export class NewProgramComponent {
       .createProgram(this.inputValue)
       .subscribe((program: ProgramInterface) => {
         console.log(program);
-        this.router.navigate([`/programs/${program._id}/program-view`]);
+        this.router.navigate([`/programs/${program._id}/mg-lists`]);
       });
   }
 }
