@@ -11,6 +11,7 @@ const { User } = require("./db/models/user.model");
 const { Program } = require("./db/models/program.model");
 const { MuscleGroup } = require("./db/models/muscle-group.model");
 const { Exercise } = require("./db/models/exercise.model");
+const { functions } = require("lodash");
 
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -186,6 +187,43 @@ app.get("/programs", authenticate, (req, res) => {
     });
 });
 
+app.patch("/programs/:programId", authenticate, async (req, res) => {
+  try {
+    const updatedProgram = await Program.findOneAndUpdate(
+      {
+        _id: req.params.programId,
+        _userId: req.user_id,
+      },
+      { $set: req.body }
+    );
+    if (updatedProgram) {
+      res.send({ message: "Program updated successfully", updatedProgram });
+    } else {
+      res.status(404).send({ message: "Program not found" });
+    }
+  } catch (error) {
+    console.error("Error updating program:", error);
+    res.status(500).send("Internal server error");
+  }
+});
+
+app.delete("/programs/:programId", authenticate, async (req, res) => {
+  try {
+    const removeProgramDoc = await Program.findOneAndDelete({
+      _id: req.params.programId,
+      _userId: req.user_id,
+    });
+    if (!removeProgramDoc) {
+      return res.status(404).send("Program not found");
+    }
+    /////////////  NZNM KAKO DA UDJEM DUBLJE OD JEDNOG NIVOA TAKO DA BRISEMO SAMO PROGRAM I MG LISTU A EXERCISES OSTAJE
+    await this.deleteMgListsFromProgram(removeProgramDoc._id);
+  } catch (error) {
+    console.error("Error deleting program:", error);
+    res.status(500).send("Internal server error");
+  }
+});
+
 /// MG's ROUTES
 
 app.post("/programs/:programsId/mg-lists", authenticate, (req, res) => {
@@ -265,38 +303,39 @@ app.post(
   }
 );
 
-// app.post("/programs/:programsId/mg-lists/:mgListId/exercises", (req, res) => {
-//   Program.findOne({ _id: req.params.programsId, _userId: req._userId })
-//     .then((program) => {
-//       if (program) {
-//         return true;
-//       } else {
-//         res.status(404).send("Program not found");
-//         return;
-//       }
-//     })
-//     .then((mgList) => {
-//       if (mgList) {
-//         MuscleGroup.findOne({
-//           _id: req.params.mgListId,
-//           _programId: req.params.programsId,
-//         }).then((canCreateExercise) => {
-//           if (canCreateExercise) {
-//             let newExersice = new Exercise({
-//               title: req.body.title,
-//               _muscleId: req.params.mgListId,
-//             });
+app.get(
+  "/programs/:programsId/mg-lists/:mgListId/exercises",
+  authenticate,
+  async (req, res) => {
+    try {
+      const exercises = await Exercise.find({ _muscleId: req.params.mgListId });
+      res.send(exercises);
+    } catch (error) {
+      console.error("Error fetching exercises:", error);
+      res.status(500).send("Internal server error");
+    }
+  }
+);
 
-//             newExersice.save().then((newExer) => {
-//               res.send(newExer);
-//             });
-//           }
-//         });
-//       } else {
-//         res.status(404);
-//       }
-//     });
-// });
+// HELPER METHODS'
+
+let deleteMgListsFromProgram = (programsId) => {
+  Program.deleteMany({
+    _programId: programsId,
+  }).then(() => {
+    console.log(
+      "mg lists from program with id :  " + programsId + " were deleted!"
+    );
+  });
+};
+
+let deleteExercisesFromMgList = (mgListId) => {
+  MuscleGroup.deleteMany({ _muscleId: mgListId }).then(() => {
+    console.log(
+      "Exercises from mg List with id :  " + mgListId + " were deleted!"
+    );
+  });
+};
 
 //LISTENING
 app.listen(3000, () => {

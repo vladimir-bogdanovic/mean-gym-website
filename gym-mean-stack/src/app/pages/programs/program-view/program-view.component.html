@@ -1,11 +1,18 @@
 <div class="page-wrapper">
   <div class="program-content">
     <div class="sidebar has-background-white">
-      <h1 class="title has-text-primary">List</h1>
+      <h1 class="title has-text-primary">MG's</h1>
       <div class="lsit-menu">
         <a
           *ngFor="let muscleGroup of muscleGroups"
           class="list-menu-item"
+          [routerLink]="
+            '/programs/' +
+            muscleGroup._programId +
+            '/mg-lists/' +
+            muscleGroup._id +
+            '/exercises'
+          "
           routerLinkActive="is-active"
         >
           <p>{{ muscleGroup.title }}</p>
@@ -16,16 +23,16 @@
         (click)="createNewMucleGroup()"
         class="button is-primary has-text-white"
       >
-        + New List
+        + New MG
       </button>
     </div>
     <!-- EXERCISES START -->
 
-    <div class="tasks-list-container has-background-light">
+    <div class="exercises-list-container has-background-light">
       <div class="top-bar">
-        <h1 class="title has-text-primary">Tasks</h1>
+        <h1 class="title has-text-primary">Exercises</h1>
         <div class="dropdown is-hoverable is-right">
-          <div class="dropdown-trigger">
+          <div class="dropdown-trigger" style="margin: 0">
             <button
               class="button"
               aria-haspopup="true"
@@ -44,16 +51,16 @@
           </div>
         </div>
       </div>
-      <div *ngIf="tasks">
+      <div *ngIf="exercises">
         <div
-          class="task"
-          *ngFor="let task of tasks"
-          [ngClass]="{ completed: task.completed }"
+          class="exercise"
+          *ngFor="let exercise of exercises"
+          [ngClass]="{ completed: exercise.completed }"
         >
-          <div class="task-text">
-            {{ task.title }}
+          <div class="exercise-text">
+            {{ exercise.title }}
           </div>
-          <div class="task-buttons">
+          <div class="exercise-buttons">
             <button class="button">
               <div class="icon">
                 <i class="fas fa-edit"></i>
@@ -68,12 +75,15 @@
           </div>
         </div>
       </div>
-      <h3 class="no-content-title" *ngIf="tasks?.length === 0">
+      <h3 class="no-content-title" *ngIf="exercises?.length === 0">
         There are no tasks here! Click the add button to create a new task.
       </h3>
-      <h3 class="no-content-title" *ngIf="!tasks">Choose list in sidebar.</h3>
+      <h3 class="no-content-title" *ngIf="!exercises">
+        Choose list in sidebar.
+      </h3>
 
       <button
+        (click)="onAddExerciseClick()"
         routerLink="./new-task"
         class="circle-add-button button is-primary"
       >

@@ -5,6 +5,7 @@ import { LoginComponent } from './pages/auth/login/login.component';
 import { ProgramViewComponent } from './pages/programs/program-view/program-view.component';
 import { NewProgramComponent } from './pages/programs/new-program/new-program.component';
 import { NewMuscleGroupComponent } from './pages/programs/new-muscle-group/new-muscle-group.component';
+import { NewExerciseComponent } from './pages/programs/new-exercise/new-exercise.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -19,6 +20,14 @@ export const routes: Routes = [
   {
     path: 'programs/:programId/new-muscle-group',
     component: NewMuscleGroupComponent,
+  },
+  {
+    path: 'programs/:programId/mg-lists/:mgListId/exercises',
+    component: ProgramViewComponent,
+  },
+  {
+    path: 'programs/:programId/mg-lists/:mgListId/new-exercise',
+    component: NewExerciseComponent,
   },
 ];
 

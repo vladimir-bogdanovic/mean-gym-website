@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { ProgramInterface } from '../models/program.model';
 import { Title } from '@angular/platform-browser';
 import { MuscleGroupInterface } from '../models/muscle-group.model';
+import { ExerciseInterface } from '../models/exercise.model';
 
 @Injectable({
   providedIn: 'root',
@@ -38,6 +39,26 @@ export class RequestsService {
   getMuscleGroup(programId: string): Observable<MuscleGroupInterface[]> {
     return this.http.get<MuscleGroupInterface[]>(
       `${this.baseUrl}/programs/${programId}/mg-lists`
+    );
+  }
+
+  createExercise(
+    progrmasId: string,
+    mgListId: string,
+    exerTitle: string
+  ): Observable<ExerciseInterface> {
+    return this.http.post<ExerciseInterface>(
+      `${this.baseUrl}/programs/${progrmasId}/mg-lists/${mgListId}/exercises`,
+      { title: exerTitle }
+    );
+  }
+
+  getExercises(
+    progrmasId: string,
+    mgListId: string
+  ): Observable<ExerciseInterface[]> {
+    return this.http.get<ExerciseInterface[]>(
+      `${this.baseUrl}/programs/${progrmasId}/mg-lists/${mgListId}/exercises`
     );
   }
 

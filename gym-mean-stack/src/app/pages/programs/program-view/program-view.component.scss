@@ -66,13 +66,13 @@ body {
     }
 
     &.is-active {
-      background-color: #cff8ef;
+      background-color: $light;
       color: $dark-blue;
     }
   }
 }
 /////////////////
-.tasks-list-container {
+.exercises-list-container {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -90,33 +90,7 @@ body {
   }
 }
 
-.lsit-menu {
-  overflow-y: scroll;
-  display: flex;
-  flex-direction: column;
-  margin-top: 15px;
-  flex-grow: 1;
-  .list-menu-item {
-    display: flex;
-    align-items: center;
-    padding: 10px 15px;
-    border-radius: 5px;
-    width: 100%;
-    color: #5f5f5f;
-    margin-bottom: 5px;
-
-    &:hover {
-      background: $light;
-    }
-
-    &.is-active {
-      background-color: #cff8ef;
-      color: $dark-blue;
-    }
-  }
-}
-
-.task {
+.exercise {
   display: flex;
   background: white;
   padding: 15px 20px;
@@ -136,24 +110,24 @@ body {
     &:hover {
       box-shadow: 0 0 0 5px #eee;
 
-      .task-buttons {
+      .exercise-buttons {
         opacity: 1;
         transform: scale(1);
       }
     }
   }
 
-  &.completed .task-text {
+  &.completed .exercise-text {
     text-decoration: line-through;
     opacity: 80%;
   }
 
-  .task-text {
+  .exercise-text {
     display: flex;
     flex-grow: 1;
   }
 
-  .task-buttons {
+  .exercise-buttons {
     transition: opacity 0.2s, transform 0.2s;
     opacity: 0;
     transform: scale(0.85);
@@ -175,4 +149,11 @@ body {
   text-align: center;
   font-size: 24px;
   margin-top: 100px;
+}
+
+.dropdown {
+  display: inline-flex;
+  position: relative;
+  vertical-align: top;
+  height: 40px;
 }
