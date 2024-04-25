@@ -11,7 +11,7 @@ const { User } = require("./db/models/user.model");
 const { Program } = require("./db/models/program.model");
 const { MuscleGroup } = require("./db/models/muscle-group.model");
 const { Exercise } = require("./db/models/exercise.model");
-const { functions } = require("lodash");
+const { functions, remove } = require("lodash");
 
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -209,18 +209,42 @@ app.patch("/programs/:programId", authenticate, async (req, res) => {
 
 app.delete("/programs/:programId", authenticate, async (req, res) => {
   try {
-    const removeProgramDoc = await Program.findOneAndDelete({
+    // 1. Delete the program
+    const deletedProgram = await Program.findOneAndDelete({
       _id: req.params.programId,
-      _userId: req.user_id,
     });
-    if (!removeProgramDoc) {
-      return res.status(404).send("Program not found");
+    if (!deletedProgram) {
+      console.log("Program not found:", req.params.programId);
+      return;
     }
-    /////////////  NZNM KAKO DA UDJEM DUBLJE OD JEDNOG NIVOA TAKO DA BRISEMO SAMO PROGRAM I MG LISTU A EXERCISES OSTAJE
-    await this.deleteMgListsFromProgram(removeProgramDoc._id);
+    console.log("Program deleted successfully:", deletedProgram);
+
+    // 3. Delete exercises associated with the deleted mgLists
+    const mgLists = await MuscleGroup.find({
+      _programId: req.params.programId,
+    });
+    const mgListIds = mgLists.map((mgList) => mgList._id);
+    console.log("mgListIds:", mgListIds);
+
+    if (mgListIds.length > 0) {
+      const deletedExercises = await Exercise.deleteMany({
+        _muscleId: { $in: mgListIds },
+      });
+      console.log("Deleted exercises:", deletedExercises);
+    } else {
+      console.log("No mgLists found for deletion");
+    }
+
+    // 2. Delete mgLists associated with the deleted program
+    const deletedMgLists = await MuscleGroup.deleteMany({
+      _programId: req.params.programId,
+    });
+    console.log("Deleted mgLists:", deletedMgLists);
+
+    console.log("Program and related data deleted successfully");
   } catch (error) {
-    console.error("Error deleting program:", error);
-    res.status(500).send("Internal server error");
+    console.error("Error deleting program and related data:", error);
+    throw error; // Re-throw the error to be handled by the caller
   }
 });
 
@@ -318,16 +342,6 @@ app.get(
 );
 
 // HELPER METHODS'
-
-let deleteMgListsFromProgram = (programsId) => {
-  Program.deleteMany({
-    _programId: programsId,
-  }).then(() => {
-    console.log(
-      "mg lists from program with id :  " + programsId + " were deleted!"
-    );
-  });
-};
 
 let deleteExercisesFromMgList = (mgListId) => {
   MuscleGroup.deleteMany({ _muscleId: mgListId }).then(() => {
