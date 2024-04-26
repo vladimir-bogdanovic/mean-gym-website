@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RequestsService } from '../../../services/requests.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { ExerciseInterface } from '../../../models/exercise.model';
 
 @Component({
   selector: 'app-new-exercise',
@@ -29,9 +30,9 @@ export class NewExerciseComponent {
 
     this.requestsService
       .createExercise(this.programId, this.muscleGroupId, this.inputValue)
-      .subscribe(() => {
+      .subscribe((exercise: ExerciseInterface) => {
         this.router.navigate([
-          `programs/${this.programId}/mg-lists/${this.muscleGroupId}/exercises`,
+          `programs/${this.programId}/mg-lists/${this.muscleGroupId}/exercises/${exercise._id}`,
         ]);
       });
   }

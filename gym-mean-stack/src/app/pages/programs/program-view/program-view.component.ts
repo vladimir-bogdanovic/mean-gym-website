@@ -4,6 +4,7 @@ import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { ActivatedRoute, Params, Router, RouterModule } from '@angular/router';
 import { MuscleGroupInterface } from '../../../models/muscle-group.model';
 import { ExerciseInterface } from '../../../models/exercise.model';
+import { ProgramInterface } from '../../../models/program.model';
 
 @Component({
   selector: 'app-program-view',
@@ -23,8 +24,20 @@ export class ProgramViewComponent implements OnInit {
   muscleGroupId!: string;
   muscleGroups!: MuscleGroupInterface[];
   exercises!: ExerciseInterface[];
+  programTitle!: string | undefined;
 
   ngOnInit(): void {
+    this.requestsService
+      .getPrograms()
+      .subscribe((programs: ProgramInterface[]) => {
+        programs.filter((program: ProgramInterface) => {
+          if (program._id === this.programId) {
+            this.programTitle = program.title;
+            console.log(this.programTitle);
+          }
+        });
+      });
+
     this.route.params.subscribe((params: Params) => {
       this.programId = params?.['programId'];
 
@@ -51,9 +64,11 @@ export class ProgramViewComponent implements OnInit {
     this.router.navigate([`programs/${this.programId}/new-muscle-group`]);
   }
 
-  onAddExerciseClick() {
+  createNewExercise() {
     this.router.navigate([
       `programs/${this.programId}/mg-lists/${this.muscleGroupId}/new-exercise`,
     ]);
   }
 }
+
+// tomorow fix css in programs-page and add edit/delete buttons

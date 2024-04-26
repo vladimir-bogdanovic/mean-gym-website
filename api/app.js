@@ -288,6 +288,75 @@ app.get("/programs/:programsId/mg-lists", authenticate, (req, res) => {
     });
 });
 
+app.patch(
+  "/programs/:programsId/mg-lists/:mgListId",
+  authenticate,
+  async (req, res) => {
+    try {
+      const program = await Program.findOne({
+        _id: req.params.programsId,
+        _userId: req.user_id,
+      });
+      if (!program) {
+        res.status(404).send("Program notddd found");
+        return;
+      }
+
+      const muscleGroup = await MuscleGroup.findById({
+        _id: req.params.mgListId,
+      });
+      if (!muscleGroup) {
+        res.status(404).send("muscle group notddd found");
+      }
+
+      muscleGroup.title = req.body.title;
+
+      const updatedMuscleGroup = await muscleGroup.save();
+      res.send(updatedMuscleGroup);
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  }
+);
+
+app.delete(
+  "/programs/:programsId/mg-lists/:mgListId",
+  authenticate,
+  async (req, res) => {
+    try {
+      // 1
+      const program = await Program.findOne({
+        _id: req.params.programsId,
+        _userId: req.user_id,
+      });
+      if (!program) {
+        console.log("Program not found:", req.params.programsId);
+        return;
+      }
+      // 3
+      const deleteExercisesFromList = await Exercise.deleteMany({
+        _muscleId: req.params.mgListId,
+      });
+      if (!deleteExercisesFromList) {
+        console.log("exercises not found", req.params.mgListId);
+      }
+      // 2
+      const muscleGroup = await MuscleGroup.findOneAndDelete({
+        _id: req.params.mgListId,
+        _programId: req.params.programsId,
+      });
+      if (!muscleGroup) {
+        console.log("Muscle group not found :", req.params.mgListId);
+      }
+
+      res.send("Muscle group deleted successfully");
+    } catch (error) {
+      console.error("Error deleting muscle group:", error);
+      res.status(500).send(error.message);
+    }
+  }
+);
+
 /// EXERCISES ROUTES
 
 app.post(
@@ -341,15 +410,79 @@ app.get(
   }
 );
 
-// HELPER METHODS'
+app.patch(
+  "/programs/:programsId/mg-lists/:mgListId/exercises/:ExerciseId",
+  authenticate,
+  async (req, res) => {
+    try {
+      const program = await Program.findOne({
+        _id: req.params.programsId,
+        _userId: req.user_id,
+      });
+      if (!program) {
+        res.status(404).send("program not found");
+      }
 
-let deleteExercisesFromMgList = (mgListId) => {
-  MuscleGroup.deleteMany({ _muscleId: mgListId }).then(() => {
-    console.log(
-      "Exercises from mg List with id :  " + mgListId + " were deleted!"
-    );
-  });
-};
+      const muscleGroup = await MuscleGroup.findOne({
+        _id: req.params.mgListId,
+        _programId: req.params.programsId,
+      });
+      if (!muscleGroup) {
+        res.status(404).send("muscle group not found");
+      }
+
+      const exercise = await Exercise.findByIdAndUpdate(
+        { _id: req.params.ExerciseId },
+        { $set: req.body }
+      );
+      if (!exercise) {
+        res.status(404).send("exercise not found");
+      }
+
+      const upadatedExercise = await exercise.save();
+      res.send(upadatedExercise);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  }
+);
+
+app.delete(
+  "/programs/:programsId/mg-lists/:mgListId/exercises/:exerciseId",
+  authenticate,
+  async (req, res) => {
+    try {
+      const program = await Program.findOne({
+        _id: req.params.programsId,
+        _userId: req.user_id,
+      });
+      if (!program) {
+        res.status(404).send("program not found");
+      }
+
+      const muscleGroup = await MuscleGroup.findOne({
+        _id: req.params.mgListId,
+        _programId: req.params.programsId,
+      });
+      if (!muscleGroup) {
+        res.status(404).send("muscle group not found");
+      }
+
+      const exercise = await Exercise.findByIdAndDelete({
+        _id: req.params.exerciseId,
+        _muscleId: req.params.mgListId,
+      });
+      if (!exercise) {
+        res.status(404).send("exercise not found");
+      }
+
+      const deletedExercise = await exercise.save();
+      res.send(deletedExercise);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  }
+);
 
 //LISTENING
 app.listen(3000, () => {

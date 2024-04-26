@@ -26,6 +26,10 @@ export const routes: Routes = [
     component: ProgramViewComponent,
   },
   {
+    path: 'programs/:programId/mg-lists/:mgListId/exercises/:exerciseId',
+    component: ProgramViewComponent,
+  },
+  {
     path: 'programs/:programId/mg-lists/:mgListId/new-exercise',
     component: NewExerciseComponent,
   },
