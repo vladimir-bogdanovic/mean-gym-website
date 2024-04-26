@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const programSchema = new mongoose.Schema({
+const muscleSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
@@ -8,11 +8,11 @@ const programSchema = new mongoose.Schema({
     trim: true,
     unique: true,
   },
-  _userId: {
+  _programId: {
     type: mongoose.Types.ObjectId,
     required: true,
   },
 });
 
-const Program = mongoose.model("Program", programSchema);
-module.exports = { Program };
+const MuscleGroup = mongoose.model("MuscleGroup", muscleSchema);
+module.exports = { MuscleGroup };

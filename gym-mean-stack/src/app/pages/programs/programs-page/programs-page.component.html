@@ -1,1 +1,46 @@
-<p>programs-page works!</p>
+<h1>default-programs</h1>
+<div class="programs-content">
+  <div class="programs">
+    <!-- CARD START -->
+    <div class="program-card">
+      <div class="img-div">
+        <img src="" alt="" />
+      </div>
+      <div class="card-info">
+        <h3>title</h3>
+        <p>instructions</p>
+      </div>
+    </div>
+    <!-- CARD END -->
+    <!-- CARD START -->
+    <div class="program-card">
+      <div class="img-div">
+        <img src="" alt="" />
+      </div>
+      <div class="card-info">
+        <h3>title</h3>
+        <p>instructions</p>
+      </div>
+      <!-- CARD END -->
+    </div>
+  </div>
+</div>
+
+<h1>USER-programs</h1>
+<div class="programs-content">
+  <div class="programs">
+    <!-- CARD START -->
+    <div *ngFor="let program of programs" class="program-card">
+      <div class="img-div">
+        <img src="" alt="" />
+      </div>
+      <div (click)="goToSelectedProgram(program._id)" class="card-info">
+        <h3>{{ program.title }}</h3>
+      </div>
+    </div>
+    <!-- CARD END -->
+    <div>
+      <button (click)="addNewProgram()">Add new program</button>
+    </div>
+  </div>
+</div>

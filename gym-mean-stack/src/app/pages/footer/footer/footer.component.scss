@@ -1,23 +1,18 @@
 @import "../../../main-styles.scss";
 
 .footer-container {
-  display: flex;
-  width: 100%;
   background-color: $primary;
-  height: 70px;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  flex-wrap: wrap;
-  position: absolute;
-  left: 0;
+  position: fixed;
+  width: 100%;
   bottom: 0;
+  opacity: 60%;
 
   .footer-content {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+    height: 70px;
   }
 
   .item {

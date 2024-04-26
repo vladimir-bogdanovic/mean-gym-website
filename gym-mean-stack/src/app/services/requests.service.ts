@@ -1,6 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ProgramInterface } from '../models/program.model';
+import { Title } from '@angular/platform-browser';
+import { MuscleGroupInterface } from '../models/muscle-group.model';
+import { ExerciseInterface } from '../models/exercise.model';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +13,54 @@ export class RequestsService {
   baseUrl = 'http://localhost:3000';
 
   constructor(private http: HttpClient) {}
+
+  createProgram(programName: string): Observable<ProgramInterface> {
+    return this.http.post<ProgramInterface>(`${this.baseUrl}/programs`, {
+      title: programName,
+    });
+  }
+
+  getPrograms(): Observable<ProgramInterface[]> {
+    return this.http.get<ProgramInterface[]>(`${this.baseUrl}/programs`);
+  }
+
+  createMuscleGroup(
+    programId: string,
+    mgTitle: string
+  ): Observable<MuscleGroupInterface> {
+    return this.http.post<MuscleGroupInterface>(
+      `${this.baseUrl}/programs/${programId}/mg-lists`,
+      {
+        title: mgTitle,
+      }
+    );
+  }
+
+  getMuscleGroup(programId: string): Observable<MuscleGroupInterface[]> {
+    return this.http.get<MuscleGroupInterface[]>(
+      `${this.baseUrl}/programs/${programId}/mg-lists`
+    );
+  }
+
+  createExercise(
+    progrmasId: string,
+    mgListId: string,
+    exerTitle: string
+  ): Observable<ExerciseInterface> {
+    return this.http.post<ExerciseInterface>(
+      `${this.baseUrl}/programs/${progrmasId}/mg-lists/${mgListId}/exercises`,
+      { title: exerTitle }
+    );
+  }
+
+  getExercises(
+    progrmasId: string,
+    mgListId: string
+  ): Observable<ExerciseInterface[]> {
+    return this.http.get<ExerciseInterface[]>(
+      `${this.baseUrl}/programs/${progrmasId}/mg-lists/${mgListId}/exercises`
+    );
+  }
 
   signup(email: string, password: string): Observable<any> {
     return this.http.post<any>(

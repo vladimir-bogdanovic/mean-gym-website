@@ -1,0 +1,36 @@
+@import "../../../main-styles.scss";
+
+.programs-content {
+  background-color: brown;
+  max-height: max-content;
+  margin-bottom: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 30px 30px 100px 30px;
+
+  .programs {
+    background-color: blue;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+    padding: 10px;
+
+    .program-card {
+      margin: 20px;
+
+      .img-div {
+        width: 200px;
+        height: 200px;
+        background-color: red;
+      }
+      .card-info {
+        background-color: green;
+      }
+    }
+  }
+}
