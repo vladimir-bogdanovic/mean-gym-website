@@ -5,8 +5,11 @@
     <a class="navbar-item"> Exercises </a>
   </div>
 
-  <div class="auth-container">
+  <div *ngIf="!loggedIn" class="auth-container">
     <a class="navbar-item"> Signup </a>
     <a class="navbar-item"> Login </a>
+  </div>
+  <div *ngIf="loggedIn" class="auth-container">
+    <a class="navbar-item"> Logout </a>
   </div>
 </div>

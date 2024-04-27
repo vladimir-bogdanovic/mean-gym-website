@@ -24,6 +24,12 @@ export class RequestsService {
     return this.http.get<ProgramInterface[]>(`${this.baseUrl}/programs`);
   }
 
+  //
+
+  deleteProgram(programId: string) {
+    return this.http.delete(`${this.baseUrl}/programs/${programId}`);
+  }
+
   createMuscleGroup(
     programId: string,
     mgTitle: string

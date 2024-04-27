@@ -24,7 +24,6 @@ export class ProgramsPageComponent implements OnInit {
     this.requestsService
       .getPrograms()
       .subscribe((programs: ProgramInterface[]) => {
-        console.log(programs);
         this.programs = programs;
       });
   }
@@ -36,4 +35,11 @@ export class ProgramsPageComponent implements OnInit {
   goToSelectedProgram(programId: string | undefined) {
     this.router.navigate([`/programs/${programId}/mg-lists`]);
   }
+
+  deleteProgramOnClikc(programId: string) {
+    this.requestsService.deleteProgram(programId);
+  }
 }
+
+// u editu user dodaje sliku ako zeli u suprotno kartica ce imati difoltnu sliku
+// takodje u new program   -||-
