@@ -50,7 +50,12 @@
         >
           check
         </button>
-        <button class="button is-link is-rounded">edit</button>
+        <button
+          (click)="editProgramClick(program._id)"
+          class="button is-link is-rounded"
+        >
+          edit
+        </button>
         <button
           (click)="deleteProgramOnClikc(program._id!)"
           class="button is-link is-rounded is-right"

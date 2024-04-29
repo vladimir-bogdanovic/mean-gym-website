@@ -6,6 +6,9 @@ import { ProgramViewComponent } from './pages/programs/program-view/program-view
 import { NewProgramComponent } from './pages/programs/new-program/new-program.component';
 import { NewMuscleGroupComponent } from './pages/programs/new-muscle-group/new-muscle-group.component';
 import { NewExerciseComponent } from './pages/programs/new-exercise/new-exercise.component';
+import { EditProgramComponent } from './pages/programs/edit-program/edit-program.component';
+import { EditMuscleGroupComponent } from './pages/programs/edit-muscle-group/edit-muscle-group.component';
+import { EditExerciseComponent } from './pages/programs/edit-exercise/edit-exercise.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -33,6 +36,16 @@ export const routes: Routes = [
     path: 'programs/:programId/mg-lists/:mgListId/new-exercise',
     component: NewExerciseComponent,
   },
+  {
+    path: 'programs/:programId',
+    component: EditProgramComponent,
+  },
+  {
+    path: 'programs/:programId/mg-lists/:mgListId/edit-muscle-group',
+    component: EditMuscleGroupComponent,
+  },
+  {
+    path: 'programs/:programId/mg-lists/:mgListId/exercises/:exerciseId/edit-exercise',
+    component: EditExerciseComponent,
+  },
 ];
-
-////////////reci unutar ruta odvoj  sa "-"

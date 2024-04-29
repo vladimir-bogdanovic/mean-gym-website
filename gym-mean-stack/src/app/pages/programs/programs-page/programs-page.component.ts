@@ -39,7 +39,14 @@ export class ProgramsPageComponent implements OnInit {
   deleteProgramOnClikc(programId: string) {
     this.requestsService.deleteProgram(programId);
   }
+
+  editProgramClick(programId: string | undefined) {
+    this.router.navigate([`programs/${programId}`]);
+  }
 }
 
-// u editu user dodaje sliku ako zeli u suprotno kartica ce imati difoltnu sliku
+// u editu user dodaje sliku ako zeli u suprotnom kartica ce imati difoltnu sliku
 // takodje u new program   -||-
+// uradjen primemr u mongo db vezbba projektu
+//
+// treba izmeniti objekte (program. mg, exer) - dodati nove propertije kao na promer sliku ili tako nesto a exercise ce imati sve propertije kao i exercise u gymAPiju

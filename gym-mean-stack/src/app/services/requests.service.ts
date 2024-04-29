@@ -24,7 +24,15 @@ export class RequestsService {
     return this.http.get<ProgramInterface[]>(`${this.baseUrl}/programs`);
   }
 
-  //
+  editProgram(
+    programId: string,
+    newTitle: string
+  ): Observable<ProgramInterface> {
+    return this.http.patch<ProgramInterface>(
+      `${this.baseUrl}/programs/${programId}`,
+      { title: newTitle }
+    );
+  }
 
   deleteProgram(programId: string) {
     return this.http.delete(`${this.baseUrl}/programs/${programId}`);
@@ -48,6 +56,23 @@ export class RequestsService {
     );
   }
 
+  editMuscleGroup(
+    programId: string,
+    mgId: string,
+    newTitle: string
+  ): Observable<MuscleGroupInterface> {
+    return this.http.patch<MuscleGroupInterface>(
+      `${this.baseUrl}/programs/${programId}/mg-lists/${mgId}`,
+      { title: newTitle }
+    );
+  }
+
+  deleteMuscleGroup(programId: string, mgListId: string) {
+    return this.http.delete(
+      `${this.baseUrl}/programs/${programId}/mg-lists/${mgListId}`
+    );
+  }
+
   createExercise(
     progrmasId: string,
     mgListId: string,
@@ -65,6 +90,24 @@ export class RequestsService {
   ): Observable<ExerciseInterface[]> {
     return this.http.get<ExerciseInterface[]>(
       `${this.baseUrl}/programs/${progrmasId}/mg-lists/${mgListId}/exercises`
+    );
+  }
+
+  editExercise(
+    progrmasId: string,
+    mgListId: string,
+    exerciseId: string,
+    newTitle: string
+  ): Observable<ExerciseInterface> {
+    return this.http.patch<ExerciseInterface>(
+      `${this.baseUrl}/programs/${progrmasId}/mg-lists/${mgListId}/exercises/${exerciseId}`,
+      { title: newTitle }
+    );
+  }
+
+  deleteExercise(programId: string, mgListId: string, exerciseId: string) {
+    return this.http.delete(
+      `${this.baseUrl}/programs/${programId}/mg-lists/${mgListId}/exercises/${exerciseId}`
     );
   }
 
