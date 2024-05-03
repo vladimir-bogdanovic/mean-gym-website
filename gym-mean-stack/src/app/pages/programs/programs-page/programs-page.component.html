@@ -5,25 +5,25 @@
 <div class="programs-content">
   <div class="programs">
     <!-- CARD START -->
-    <div class="program-card-test">
-      <div class="program-img-test"></div>
-      <div class="program-name-test">
+    <div class="program-card">
+      <div class="program-img"></div>
+      <div class="program-name">
         <p>program name:</p>
         <h2>placeholder</h2>
       </div>
-      <div class="program-buttons-test">
+      <div class="program-buttons">
         <button class="button is-link is-rounded is-right">check</button>
       </div>
     </div>
     <!-- CARD END -->
     <!-- CARD START -->
-    <div class="program-card-test">
-      <div class="program-img-test"></div>
-      <div class="program-name-test">
+    <div class="program-card">
+      <div class="program-img"></div>
+      <div class="program-name">
         <p>program name:</p>
         <h2>placeholder</h2>
       </div>
-      <div class="program-buttons-test">
+      <div class="program-buttons">
         <button class="button is-link is-rounded is-right">check</button>
       </div>
     </div>
@@ -37,13 +37,13 @@
 
 <div class="programs-content">
   <div class="programs">
-    <div *ngFor="let program of programs" class="program-card-test">
-      <div class="program-img-test"></div>
-      <div class="program-name-test">
+    <div *ngFor="let program of programs" class="program-card">
+      <div class="program-img"></div>
+      <div class="program-name">
         <p>program name:</p>
         <h2>{{ program.title }}</h2>
       </div>
-      <div class="program-buttons-test">
+      <div class="program-buttons">
         <button
           (click)="goToSelectedProgram(program._id)"
           class="button is-link is-rounded is-right"

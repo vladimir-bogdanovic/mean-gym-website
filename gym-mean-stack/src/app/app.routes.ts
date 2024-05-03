@@ -9,6 +9,7 @@ import { NewExerciseComponent } from './pages/programs/new-exercise/new-exercise
 import { EditProgramComponent } from './pages/programs/edit-program/edit-program.component';
 import { EditMuscleGroupComponent } from './pages/programs/edit-muscle-group/edit-muscle-group.component';
 import { EditExerciseComponent } from './pages/programs/edit-exercise/edit-exercise.component';
+import { ExercisesComponent } from './pages/exercises/exercises.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -47,5 +48,9 @@ export const routes: Routes = [
   {
     path: 'programs/:programId/mg-lists/:mgListId/exercises/:exerciseId/edit-exercise',
     component: EditExerciseComponent,
+  },
+  {
+    path: 'exercises',
+    component: ExercisesComponent,
   },
 ];

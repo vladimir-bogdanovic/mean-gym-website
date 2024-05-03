@@ -1,0 +1,25 @@
+<div class="exercises-page-wrapper">
+  <div class="funcionalities-div-wrapper">
+    <div class="search-container"></div>
+    <div class="filter-container"></div>
+  </div>
+
+  <div class="exercises-cards-wrapper">
+    <div class="exercises-container">
+      <div *ngFor="let exercise of exercises" class="exercise-card">
+        <div class="exercise-info">
+          <p>Exercise video:</p>
+          <a [href]="exercise.Video"> {{ exercise.Video | shortenLink }}</a>
+        </div>
+        <div class="exercise-info">
+          <p>Exercise name:</p>
+          {{ exercise.WorkOut }}
+        </div>
+        <div class="exercise-info">
+          <p>Muscle Group name:</p>
+          {{ exercise.Muscles }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
