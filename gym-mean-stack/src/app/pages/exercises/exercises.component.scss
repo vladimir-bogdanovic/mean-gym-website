@@ -1,4 +1,38 @@
 @import "../../main-styles.scss";
+////////////////////////////////////////////////////
+
+.filter-menu {
+  background-color: #c7b7b7;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  display: none;
+  //justify-content: start;
+  // align-items: start;
+  // flex-wrap: wrap;
+}
+
+.filter-menu.show {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #e57a7a;
+  z-index: 5;
+}
+
+.filter-submenu {
+  background-color: #e57a7a;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  display: none;
+  justify-content: start;
+  align-items: start;
+  flex-wrap: wrap;
+}
+
+.filter-submenu.show {
+  display: flex;
+}
+////////////////////////////////////////////////////
 
 .exercises-page-wrapper {
   display: flex;
@@ -8,6 +42,17 @@
   margin-bottom: 140px;
 }
 
+// exercise-
+.exercises-title {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  color: $light;
+  font-size: 36px;
+  text-transform: uppercase;
+  text-decoration: underline;
+}
+
 .exercises-cards-wrapper {
   display: flex;
   justify-content: center;
@@ -15,7 +60,7 @@
   flex-wrap: wrap;
   margin: 2px;
 
-  .exercises-container {
+  .exercises-cards-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -50,5 +95,21 @@
         }
       }
     }
+  }
+}
+
+.pagination-buttons {
+  display: flex;
+  margin-top: 10px;
+
+  flex-wrap: wrap;
+
+  button {
+    margin: 2px 7px;
+  }
+
+  span {
+    margin-top: 9px;
+    color: $light;
   }
 }

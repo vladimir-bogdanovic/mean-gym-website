@@ -1,26 +1,120 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { ExercisesService } from '../../services/exercises.service';
 import { GymApiExerciseInterface } from '../../models/gym-api-exercise.model';
-import { NgFor } from '@angular/common';
+import { NgClass, NgFor, NgIf, SlicePipe } from '@angular/common';
 import { ShortenLinkPipe } from '../../pipes/shorten-link.pipe';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-exercises',
   standalone: true,
-  imports: [NgFor, ShortenLinkPipe],
+  imports: [
+    NgFor,
+    NgIf,
+    ShortenLinkPipe,
+    SlicePipe,
+    ReactiveFormsModule,
+    NgClass,
+  ],
   templateUrl: './exercises.component.html',
   styleUrl: './exercises.component.scss',
 })
 export class ExercisesComponent implements OnInit {
   exercises!: GymApiExerciseInterface[];
 
-  constructor(private exerciseService: ExercisesService) {}
+  currentPage = 1;
+  itemsPerPage = 20;
+  totalPageCount!: number;
+
+  searchForm!: FormGroup;
+  isFilterMenuOpen: boolean = false;
+  isFilterSubmenuOpen: boolean = false;
+  divElement!: HTMLElement;
+  muscleGroups: string[] = ['biceps', 'triceps', 'chest', 'legs', 'shoulders'];
+
+  constructor(
+    private exerciseService: ExercisesService,
+    private fb: FormBuilder,
+    private renderer: Renderer2,
+    private elementRef: ElementRef
+  ) {}
 
   ngOnInit(): void {
     this.exerciseService
       .getFitnessData()
       .subscribe((resData: GymApiExerciseInterface[]) => {
+        // by default all exercises
         this.exercises = resData;
+        this.totalPageCount = Math.ceil(this.exercises.length / 20);
+        // exercises by search input
+        if (this.searchForm.value === '') {
+          this.exercises = resData;
+        } else {
+          this.serachInput(resData);
+        }
+      });
+
+    this.searchForm = this.fb.group({
+      searchParameters: [''],
+    });
+
+    // click outside start
+    this.divElement =
+      this.elementRef.nativeElement.querySelector('.filter-container');
+    this.renderer.listen(
+      'document',
+      'click',
+      this.handleDocumentClick.bind(this)
+    );
+    // click outside end
+  }
+
+  // FILTER FUNCINALITY START
+
+  handleDocumentClick(event: MouseEvent) {
+    if (!this.divElement.contains(event.target as Node)) {
+      // Click occurred outside the div, close it or perform other actions
+      this.isFilterMenuOpen = false;
+    }
+  }
+
+  onMuscleGroupEnter() {
+    this.isFilterSubmenuOpen = true;
+  }
+
+  onMuscleGroupLeave() {
+    this.isFilterSubmenuOpen = false;
+  }
+
+  toggleFilterMenu() {
+    this.isFilterMenuOpen = !this.isFilterMenuOpen;
+  }
+
+  closeFilterMenu() {
+    if (this.isFilterMenuOpen) {
+      this.isFilterMenuOpen = false;
+    }
+  }
+
+  // FILTER FUNCINALITY END
+
+  onPageChange(pageNumber: number) {
+    this.currentPage = pageNumber;
+  }
+
+  serachInput(data: GymApiExerciseInterface[]) {
+    this.searchForm
+      .get('searchParameters')
+      ?.valueChanges.pipe(debounceTime(500))
+      .subscribe((value: string) => {
+        this.exercises = data.filter((data: GymApiExerciseInterface) => {
+          const lowerCaseData = data.WorkOut.toLowerCase();
+          const lowerCaseValue = value.toLowerCase();
+          console.log(data);
+          return lowerCaseData.includes(lowerCaseValue);
+        });
+        this.totalPageCount = Math.ceil(this.exercises.length / 20);
       });
   }
 }
