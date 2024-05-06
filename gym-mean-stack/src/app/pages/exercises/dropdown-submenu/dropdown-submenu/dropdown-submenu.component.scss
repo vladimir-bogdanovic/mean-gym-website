@@ -1,0 +1,12 @@
+.filter-submenu {
+  background-color: #e57a7a;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  display: none;
+  justify-content: start;
+  align-items: start;
+  flex-wrap: wrap;
+}
+
+.filter-submenu.show {
+  display: flex;
+}

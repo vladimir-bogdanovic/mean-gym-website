@@ -5,6 +5,7 @@ import { NgClass, NgFor, NgIf, SlicePipe } from '@angular/common';
 import { ShortenLinkPipe } from '../../pipes/shorten-link.pipe';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
+import { DropdownSubmenuComponent } from './dropdown-submenu/dropdown-submenu/dropdown-submenu.component';
 
 @Component({
   selector: 'app-exercises',
@@ -16,6 +17,7 @@ import { debounceTime } from 'rxjs';
     SlicePipe,
     ReactiveFormsModule,
     NgClass,
+    DropdownSubmenuComponent,
   ],
   templateUrl: './exercises.component.html',
   styleUrl: './exercises.component.scss',
@@ -31,7 +33,12 @@ export class ExercisesComponent implements OnInit {
   isFilterMenuOpen: boolean = false;
   isFilterSubmenuOpen: boolean = false;
   divElement!: HTMLElement;
-  muscleGroups: string[] = ['biceps', 'triceps', 'chest', 'legs', 'shoulders'];
+  muscleGroups: string[] = [];
+  muscleGroupsUnique: string[] = [];
+  intensityLvl: string[] = [];
+  intensityLvlUnique: string[] = [];
+  equipment: string[] = [];
+  EquipmentUnique: string[] = [];
 
   constructor(
     private exerciseService: ExercisesService,
@@ -46,6 +53,15 @@ export class ExercisesComponent implements OnInit {
       .subscribe((resData: GymApiExerciseInterface[]) => {
         // by default all exercises
         this.exercises = resData;
+
+        resData.filter((exercises: GymApiExerciseInterface) => {
+          this.muscleGroups.push(exercises.Muscles);
+          this.intensityLvl.push(exercises.Intensity_Level);
+          this.equipment.push(exercises.Equipment);
+          this.muscleGroupsUnique = this.makeUniqueArray(this.muscleGroups);
+          this.intensityLvlUnique = this.makeUniqueArray(this.intensityLvl);
+          this.EquipmentUnique = this.makeUniqueArray(this.equipment);
+        });
         this.totalPageCount = Math.ceil(this.exercises.length / 20);
         // exercises by search input
         if (this.searchForm.value === '') {
@@ -68,6 +84,11 @@ export class ExercisesComponent implements OnInit {
       this.handleDocumentClick.bind(this)
     );
     // click outside end
+  }
+
+  // unique array method
+  makeUniqueArray(arrayToFilter: string[]) {
+    return [...new Set(arrayToFilter)];
   }
 
   // FILTER FUNCINALITY START

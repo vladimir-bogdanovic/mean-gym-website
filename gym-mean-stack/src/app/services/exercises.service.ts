@@ -25,6 +25,18 @@ export class ExercisesService {
     });
   }
 
+  getDataForFilter(
+    key: string,
+    value: string
+  ): Observable<GymApiExerciseInterface[]> {
+    return this.http.get<GymApiExerciseInterface[]>(
+      `${this.baseAPI}?${key}=${value}`,
+      {
+        headers: this.headers,
+      }
+    );
+  }
+
   // getMuscleGroupExercises(muscleGroup: string) {
   //   return this.http.get(`${this.baseAPI}?Muscles=${muscleGroup}`, {
   //     headers: this.headers,

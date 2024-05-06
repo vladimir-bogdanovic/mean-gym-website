@@ -17,28 +17,26 @@
       </div>
       <div class="filter-menu" [ngClass]="{ show: isFilterMenuOpen }">
         <!-- //start make child component start -->
-        <div
-          (mouseenter)="onMuscleGroupEnter()"
-          (mouseleave)="onMuscleGroupLeave()"
-          class="dropdown-items"
-        >
-          <h2>Muscle Grouops</h2>
-          <div
-            class="filter-submenu"
-            [ngClass]="{ show: isFilterSubmenuOpen }"
-            *ngFor="let mg of muscleGroups"
-          >
-            <ul>
-              <li>{{ mg }}</li>
-            </ul>
-          </div>
-        </div>
-        <!-- //start make child component end  -->
         <div class="dropdown-items">
-          <h2>Equipment</h2>
+          <h2>All exercises</h2>
         </div>
         <div class="dropdown-items">
-          <h2>Intensity Level</h2>
+          <app-dropdown-submenu
+            [title]="'Muscle Groups'"
+            [submenuOption]="muscleGroupsUnique"
+          ></app-dropdown-submenu>
+        </div>
+        <div class="dropdown-items">
+          <app-dropdown-submenu
+            [title]="'Equipment'"
+            [submenuOption]="EquipmentUnique"
+          ></app-dropdown-submenu>
+        </div>
+        <div class="dropdown-items">
+          <app-dropdown-submenu
+            [title]="'Intensity-lvls'"
+            [submenuOption]="intensityLvlUnique"
+          ></app-dropdown-submenu>
         </div>
       </div>
 

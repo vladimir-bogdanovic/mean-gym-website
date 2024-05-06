@@ -10,6 +10,7 @@ import { EditProgramComponent } from './pages/programs/edit-program/edit-program
 import { EditMuscleGroupComponent } from './pages/programs/edit-muscle-group/edit-muscle-group.component';
 import { EditExerciseComponent } from './pages/programs/edit-exercise/edit-exercise.component';
 import { ExercisesComponent } from './pages/exercises/exercises.component';
+import { DropdownSubmenuComponent } from './pages/exercises/dropdown-submenu/dropdown-submenu/dropdown-submenu.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -53,4 +54,5 @@ export const routes: Routes = [
     path: 'exercises',
     component: ExercisesComponent,
   },
+  { path: 'test', component: DropdownSubmenuComponent },
 ];
