@@ -1,5 +1,5 @@
 import { NgClass, NgFor } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ExercisesService } from '../../../../services/exercises.service';
 import { GymApiExerciseInterface } from '../../../../models/gym-api-exercise.model';
 
@@ -13,6 +13,7 @@ import { GymApiExerciseInterface } from '../../../../models/gym-api-exercise.mod
 export class DropdownSubmenuComponent implements OnInit {
   @Input() title!: string;
   @Input() submenuOption!: string[];
+  @Output() FilteredData = new EventEmitter<GymApiExerciseInterface[]>();
   isFilterSubmenuOpen: boolean = false;
 
   constructor(private exerciseServise: ExercisesService) {}
@@ -35,6 +36,7 @@ export class DropdownSubmenuComponent implements OnInit {
           this.getSelectedItem(selectedOption, keysToTry);
         } else {
           // Data found, do something with it
+          this.FilteredData.emit(resData);
           console.log('Data found:', resData);
         }
       });
@@ -44,11 +46,11 @@ export class DropdownSubmenuComponent implements OnInit {
     console.log(this.submenuOption);
   }
 
-  onMuscleGroupEnter() {
+  onFilterOptionEnter() {
     this.isFilterSubmenuOpen = true;
   }
 
-  onMuscleGroupLeave() {
+  onFilterOptionLeave() {
     this.isFilterSubmenuOpen = false;
   }
 }

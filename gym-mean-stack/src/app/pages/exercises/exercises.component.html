@@ -9,9 +9,9 @@
         <input type="text" formControlName="searchParameters" />
       </form>
     </div>
-    <div class="filter-container">
-      <!--filter start -->
 
+    <!--filter start -->
+    <div class="filter-container">
       <div (click)="toggleFilterMenu()" class="filter-button">
         <button class="button">Filter by</button>
       </div>
@@ -22,6 +22,7 @@
         </div>
         <div class="dropdown-items">
           <app-dropdown-submenu
+            (FilteredData)="renderFilteredData($event)"
             [title]="'Muscle Groups'"
             [submenuOption]="muscleGroupsUnique"
           ></app-dropdown-submenu>
@@ -30,12 +31,14 @@
           <app-dropdown-submenu
             [title]="'Equipment'"
             [submenuOption]="EquipmentUnique"
+            (FilteredData)="renderFilteredData($event)"
           ></app-dropdown-submenu>
         </div>
         <div class="dropdown-items">
           <app-dropdown-submenu
             [title]="'Intensity-lvls'"
             [submenuOption]="intensityLvlUnique"
+            (FilteredData)="renderFilteredData($event)"
           ></app-dropdown-submenu>
         </div>
       </div>

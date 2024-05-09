@@ -4,7 +4,7 @@ import { GymApiExerciseInterface } from '../../models/gym-api-exercise.model';
 import { NgClass, NgFor, NgIf, SlicePipe } from '@angular/common';
 import { ShortenLinkPipe } from '../../pipes/shorten-link.pipe';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime } from 'rxjs';
+import { BehaviorSubject, debounceTime } from 'rxjs';
 import { DropdownSubmenuComponent } from './dropdown-submenu/dropdown-submenu/dropdown-submenu.component';
 
 @Component({
@@ -24,6 +24,8 @@ import { DropdownSubmenuComponent } from './dropdown-submenu/dropdown-submenu/dr
 })
 export class ExercisesComponent implements OnInit {
   exercises!: GymApiExerciseInterface[];
+  exerciseSubject: BehaviorSubject<GymApiExerciseInterface[]> =
+    new BehaviorSubject<GymApiExerciseInterface[]>([]);
 
   currentPage = 1;
   itemsPerPage = 20;
@@ -53,22 +55,28 @@ export class ExercisesComponent implements OnInit {
       .subscribe((resData: GymApiExerciseInterface[]) => {
         // by default all exercises
         this.exercises = resData;
+        this.exerciseSubject.next(this.exercises);
+        // console.log(this.exerciseSubject, this.exercises);
 
-        resData.filter((exercises: GymApiExerciseInterface) => {
-          this.muscleGroups.push(exercises.Muscles);
-          this.intensityLvl.push(exercises.Intensity_Level);
-          this.equipment.push(exercises.Equipment);
-          this.muscleGroupsUnique = this.makeUniqueArray(this.muscleGroups);
-          this.intensityLvlUnique = this.makeUniqueArray(this.intensityLvl);
-          this.EquipmentUnique = this.makeUniqueArray(this.equipment);
+        this.exerciseSubject.subscribe((resDataSubject) => {
+          console.log(resDataSubject);
+          resData.filter((exercises: GymApiExerciseInterface) => {
+            this.muscleGroups.push(exercises.Muscles);
+            this.intensityLvl.push(exercises.Intensity_Level);
+            this.equipment.push(exercises.Equipment);
+            this.muscleGroupsUnique = this.makeUniqueArray(this.muscleGroups);
+            this.intensityLvlUnique = this.makeUniqueArray(this.intensityLvl);
+            this.EquipmentUnique = this.makeUniqueArray(this.equipment);
+
+            this.totalPageCount = Math.ceil(resDataSubject.length / 20);
+            // exercises by search input
+            if (this.searchForm.value === '') {
+              this.exercises = resDataSubject;
+            } else {
+              this.serachInput(resDataSubject);
+            }
+          });
         });
-        this.totalPageCount = Math.ceil(this.exercises.length / 20);
-        // exercises by search input
-        if (this.searchForm.value === '') {
-          this.exercises = resData;
-        } else {
-          this.serachInput(resData);
-        }
       });
 
     this.searchForm = this.fb.group({
@@ -93,19 +101,19 @@ export class ExercisesComponent implements OnInit {
 
   // FILTER FUNCINALITY START
 
+  renderFilteredData(dataFromChild: GymApiExerciseInterface[]) {
+    //console.log(dataFromChild);
+    this.exercises = dataFromChild;
+    this.exerciseSubject.next(this.exercises);
+    // console.log(this.exerciseSubject);
+    //console.log(this.exercises);
+  }
+
   handleDocumentClick(event: MouseEvent) {
     if (!this.divElement.contains(event.target as Node)) {
       // Click occurred outside the div, close it or perform other actions
       this.isFilterMenuOpen = false;
     }
-  }
-
-  onMuscleGroupEnter() {
-    this.isFilterSubmenuOpen = true;
-  }
-
-  onMuscleGroupLeave() {
-    this.isFilterSubmenuOpen = false;
   }
 
   toggleFilterMenu() {
@@ -127,7 +135,7 @@ export class ExercisesComponent implements OnInit {
   serachInput(data: GymApiExerciseInterface[]) {
     this.searchForm
       .get('searchParameters')
-      ?.valueChanges.pipe(debounceTime(500))
+      ?.valueChanges.pipe(debounceTime(1000))
       .subscribe((value: string) => {
         this.exercises = data.filter((data: GymApiExerciseInterface) => {
           const lowerCaseData = data.WorkOut.toLowerCase();

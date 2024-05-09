@@ -1,12 +1,31 @@
+@import "../../../../main-styles.scss";
+
+.dropdown-items {
+  max-height: 300px; /* Set a fixed height for the container */
+  overflow-y: scroll;
+}
+
 .filter-submenu {
-  background-color: #e57a7a;
+  background-color: $primary;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   display: none;
   justify-content: start;
   align-items: start;
   flex-wrap: wrap;
+  list-style-type: none; /* Remove default list styles */
 }
 
 .filter-submenu.show {
   display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: $light-blue;
+  z-index: 5;
+  width: 290px;
+  max-width: 350px;
+  border-bottom: solid 1px black;
 }
+
+// add transition to hover
