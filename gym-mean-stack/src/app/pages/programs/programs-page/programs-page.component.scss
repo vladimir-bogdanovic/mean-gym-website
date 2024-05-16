@@ -45,16 +45,26 @@
       margin: 10px;
 
       .program-img {
-        background-image: url(../../../../assets/program-card-cover-img.jpg);
+        // background-image: url(../../../../assets/program-card-cover-img.jpg);
         width: 100%;
-        height: 250px;
-        position: relative;
-        left: 0;
-        bottom: 0;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        border-radius: 7px 7px 0 0;
+        ///height: 250px;
+        //  max-height: 250px;
+        // position: relative;
+        //  left: 0;
+        // bottom: 0;
+        //  background-position: center;
+        // background-repeat: no-repeat;
+        // background-size: cover;
+        //  border-radius: 7px 7px 0 0;
+
+        img {
+          //display: flex;
+          // flex-grow: 1;
+          width: 100%;
+          height: 250px;
+          border-radius: 7px 7px 0 0;
+          padding: 2px;
+        }
       }
 
       .program-name {

@@ -6,7 +6,12 @@
   <div class="funcionalities-div-wrapper">
     <div class="search-container">
       <form [formGroup]="searchForm">
-        <input type="text" formControlName="searchParameters" />
+        <input
+          class="input is-info"
+          type="text"
+          placeholder="Search exercise..."
+          formControlName="searchParameters"
+        />
       </form>
     </div>
 

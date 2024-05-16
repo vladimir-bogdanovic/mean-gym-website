@@ -6,12 +6,22 @@ app.use(express.json());
 const mongoose = require("./db/mongoose");
 
 const jwt = require("jsonwebtoken");
+const path = require("path");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const router = express.Router();
 
 const { User } = require("./db/models/user.model");
 const { Program } = require("./db/models/program.model");
 const { MuscleGroup } = require("./db/models/muscle-group.model");
 const { Exercise } = require("./db/models/exercise.model");
 const { functions, remove } = require("lodash");
+const storage = require("./helpers/storage");
+
+app.use(bodyParser.json());
+app.use(cors());
+
+app.use("/images", express.static(path.join("images")));
 
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -161,17 +171,25 @@ app.get("/users/me/access-token", verifySession, (req, res) => {
 
 /// PROGRAMS ROUTES
 
-app.post("/programs", authenticate, (req, res) => {
-  let title = req.body.title;
+app.post("/programs", authenticate, storage, async (req, res) => {
+  try {
+    const title = req.body.title;
+    if (!req.file) {
+      return res.status(400).send("No file uploaded.");
+    }
+    const imagePath = `http://localhost:3000/images/${req.file.filename}`;
 
-  let newTitle = new Program({
-    title: title,
-    _userId: req.user_id,
-  });
-  newTitle.save().then((program) => {
-    res.send(program);
-    res.send(console.log(title, newTitle));
-  });
+    let newProgram = new Program({
+      title: title,
+      imagePath: imagePath,
+      _userId: req.user_id,
+    });
+    const savedProgram = await newProgram.save();
+    res.status(201).send(savedProgram);
+  } catch (error) {
+    console.error("Error while creating program:", error);
+    res.status(500).send("Internal server error");
+  }
 });
 
 app.get("/programs", authenticate, (req, res) => {
@@ -187,14 +205,15 @@ app.get("/programs", authenticate, (req, res) => {
     });
 });
 
-app.patch("/programs/:programId", authenticate, async (req, res) => {
+app.patch("/programs/:programId", authenticate, storage, async (req, res) => {
   try {
+    const imagePath = `http://localhost:3000/images/${req.file.filename}`;
     const updatedProgram = await Program.findOneAndUpdate(
       {
         _id: req.params.programId,
         _userId: req.user_id,
       },
-      { $set: req.body }
+      { $set: { title: req.body.title, imagePath: imagePath } }
     );
     if (updatedProgram) {
       res.send({ message: "Program updated successfully", updatedProgram });
@@ -242,6 +261,8 @@ app.delete("/programs/:programId", authenticate, async (req, res) => {
     console.log("Deleted mgLists:", deletedMgLists);
 
     console.log("Program and related data deleted successfully");
+
+    res.send("deleted successfully");
   } catch (error) {
     console.error("Error deleting program and related data:", error);
     throw error; // Re-throw the error to be handled by the caller

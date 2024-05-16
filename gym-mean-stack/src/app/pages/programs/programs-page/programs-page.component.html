@@ -36,9 +36,12 @@
 </div>
 
 <div class="programs-content">
-  <div class="programs">
+  <div *ngIf="programs" class="programs">
     <div *ngFor="let program of programs" class="program-card">
-      <div class="program-img"></div>
+      <div class="program-img">
+        <img [src]="program.imagePath" alt="" />
+      </div>
+
       <div class="program-name">
         <p>program name:</p>
         <h2>{{ program.title }}</h2>
@@ -64,6 +67,7 @@
         </button>
       </div>
     </div>
+
     <!-- CARD END -->
     <div class="add-new-program-div">
       <button (click)="addNewProgram()" class="button is-link is-rounded">

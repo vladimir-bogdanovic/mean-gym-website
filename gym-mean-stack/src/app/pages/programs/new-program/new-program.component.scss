@@ -1,0 +1,38 @@
+.wrapper {
+  // background-color: brown;
+  max-height: max-content;
+  margin-bottom: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 30px 30px 100px 30px;
+
+  .centered-content {
+    background-color: blue;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+    padding: 10px;
+    border-radius: 7px;
+  }
+}
+
+.white-box {
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.upload-img-container input[type="file"] {
+  display: none;
+}
+.custom-file-upload {
+  margin-top: 10px;
+  border: 2px solid #aeaeae;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+}

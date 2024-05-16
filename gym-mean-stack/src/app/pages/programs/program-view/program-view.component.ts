@@ -28,8 +28,9 @@ export class ProgramViewComponent implements OnInit {
   programTitle!: string | undefined;
 
   ngOnInit(): void {
+    this.requestsService.getPrograms();
     this.requestsService
-      .getPrograms()
+      .getProgramsStream()
       .subscribe((programs: ProgramInterface[]) => {
         programs.filter((program: ProgramInterface) => {
           if (program._id === this.programId) {

@@ -1,30 +1,68 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RequestsService } from '../../../services/requests.service';
-import { ProgramInterface } from '../../../models/program.model';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-new-program',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, NgIf, ReactiveFormsModule],
   templateUrl: './new-program.component.html',
   styleUrl: './new-program.component.scss',
 })
-export class NewProgramComponent {
+export class NewProgramComponent implements OnInit {
   constructor(
     private requestsService: RequestsService,
     private router: Router
   ) {}
 
-  inputValue!: string;
+  programForm!: FormGroup;
+  imageData!: string;
 
-  createNewProgram() {
-    this.requestsService
-      .createProgram(this.inputValue)
-      .subscribe((program: ProgramInterface) => {
-        console.log(program);
-        this.router.navigate([`/programs/${program._id}/mg-lists`]);
-      });
+  ngOnInit(): void {
+    this.programForm = new FormGroup({
+      name: new FormControl(null),
+      image: new FormControl(null),
+    });
+  }
+
+  onSubmit() {
+    this.requestsService.createProgram(
+      this.programForm.value.name,
+      this.programForm.value.image
+    );
+    console.log(typeof this.programForm.value.image);
+    console.log(this.programForm.value.image);
+    console.log(this.programForm.value.name);
+    this.programForm.reset();
+    this.imageData = null!;
+  }
+  onFileSelected(event: Event) {
+    const allowedFileTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+    const input = event.target as HTMLInputElement;
+    if (input && input.files && input.files.length > 0) {
+      const file = input.files[0];
+      console.log(typeof file);
+      console.log(file);
+      if (file && allowedFileTypes.includes(file.type)) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.imageData = reader.result as string;
+        };
+        reader.readAsDataURL(file);
+        // Assign file to image control in form
+        this.programForm.patchValue({ image: file });
+      } else {
+        console.log('Invalid file type selected');
+      }
+    } else {
+      console.log('No file selected');
+    }
   }
 }
