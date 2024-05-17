@@ -1,14 +1,18 @@
 const multer = require("multer");
+const crypto = require("crypto");
+const path = require("path");
 
 const diskStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "images");
   },
   filename: (req, file, cb) => {
-    const mimeType = file.mimetype.split("/");
-    const fileType = mimeType[1];
-    const fileName = file.originalname + "." + fileType;
-    cb(null, fileName);
+    const hash = crypto
+      .createHash("md5")
+      .update(Date.now().toString() + file.originalname)
+      .digest("hex");
+    const extension = path.extname(file.originalname);
+    cb(null, `${hash}${extension}`);
   },
 });
 

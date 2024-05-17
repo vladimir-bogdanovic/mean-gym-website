@@ -7,6 +7,7 @@ const mongoose = require("./db/mongoose");
 
 const jwt = require("jsonwebtoken");
 const path = require("path");
+const fs = require("fs");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const router = express.Router();
@@ -21,7 +22,7 @@ const storage = require("./helpers/storage");
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use("/images", express.static(path.join("images")));
+app.use("/images", express.static(path.join("images"))); // not sure wtf is this
 
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -226,7 +227,7 @@ app.patch("/programs/:programId", authenticate, storage, async (req, res) => {
   }
 });
 
-app.delete("/programs/:programId", authenticate, async (req, res) => {
+app.delete("/programs/:programId", authenticate, storage, async (req, res) => {
   try {
     // 1. Delete the program
     const deletedProgram = await Program.findOneAndDelete({
@@ -242,6 +243,7 @@ app.delete("/programs/:programId", authenticate, async (req, res) => {
     const mgLists = await MuscleGroup.find({
       _programId: req.params.programId,
     });
+
     const mgListIds = mgLists.map((mgList) => mgList._id);
     console.log("mgListIds:", mgListIds);
 
@@ -258,11 +260,27 @@ app.delete("/programs/:programId", authenticate, async (req, res) => {
     const deletedMgLists = await MuscleGroup.deleteMany({
       _programId: req.params.programId,
     });
-    console.log("Deleted mgLists:", deletedMgLists);
+    if (!deletedMgLists) {
+      console.log("No mgLists found for deletion");
+    } else {
+      console.log("Deleted mgLists:", deletedMgLists);
+    }
 
-    console.log("Program and related data deleted successfully");
+    // 4. Delete the image file from the local storage
+    const imagePath = path.join(
+      __dirname,
+      "images",
+      path.basename(deletedProgram.imagePath)
+    );
+    fs.unlink(imagePath, (err) => {
+      if (err) {
+        console.error("Error deleting image file:", err);
+      } else {
+        console.log("Image file deleted successfully:", imagePath);
+      }
+    });
 
-    res.send("deleted successfully");
+    res.send("Program and related data deleted successfully");
   } catch (error) {
     console.error("Error deleting program and related data:", error);
     throw error; // Re-throw the error to be handled by the caller

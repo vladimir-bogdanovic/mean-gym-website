@@ -1,4 +1,4 @@
-<div class="centered-content">
+<!-- <div class="centered-content">
   <div class="white-box">
     <h1 class="title">Edit program</h1>
 
@@ -18,6 +18,45 @@
       >
         Edit
       </button>
+    </div>
+  </div>
+</div>
+ -->
+
+<div class="wrapper">
+  <div class="centered-content">
+    <div class="white-box">
+      <h1 class="title">Edit program</h1>
+      <form [formGroup]="programForm" (submit)="onSubmit()">
+        <input
+          class="input has-background-light is-medium"
+          type="text"
+          formControlName="name"
+          placeholder="Enter program name..."
+        />
+        <div class="upload-img-container">
+          <input
+            class="input-image"
+            type="file"
+            id="fileInput"
+            (change)="onFileSelected($event)"
+          />
+          <label class="custom-file-upload" for="fileInput"
+            >Click here to upload an image</label
+          >
+        </div>
+
+        <div *ngIf="imageData">
+          <img [src]="imageData" alt="programForm.value.name" />
+        </div>
+        <br /><br />
+        <div class="buttons is-right">
+          <button class="button is-medium">Cancel</button>
+          <button type="submit" class="button is-info has-text-white is-medium">
+            Edit
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

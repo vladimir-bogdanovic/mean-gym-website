@@ -45,6 +45,7 @@ export class ProgramsPageComponent implements OnInit, OnDestroy {
   }
 
   deleteProgramOnClikc(programId: string) {
+    console.log(programId);
     this.requestsService.deleteProgram(programId);
   }
 

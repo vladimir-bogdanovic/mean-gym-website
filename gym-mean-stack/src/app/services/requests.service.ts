@@ -70,18 +70,57 @@ export class RequestsService {
     return this.programs$.asObservable();
   }
 
-  editProgram(
-    programId: string,
-    newTitle: string
-  ): Observable<ProgramInterface> {
-    return this.http.patch<ProgramInterface>(
-      `${this.baseUrl}/programs/${programId}`,
-      { title: newTitle }
-    );
+  editProgram(programId: string, name: string, image: any) {
+    if (typeof image === 'string') {
+      const blob = new Blob([image], { type: 'text/plain' });
+      image = blob;
+      console.log(image);
+    }
+    if (!(image instanceof File || image instanceof Blob)) {
+      console.error(
+        'The provided image is not a Blob or File. Received:',
+        typeof image
+      );
+      throw new Error('The provided image is not a Blob or File.');
+    }
+    // Create FormData object
+    const programData = new FormData();
+    programData.append('title', name);
+    // Handle different types of image input
+    if (image instanceof File) {
+      programData.append('image', image, image.name);
+    } else {
+      // If image is not a File, assume it's a Blob
+      programData.append('image', image, 'image.txt');
+    }
+    this.http
+      .patch<ProgramInterface>(
+        `${this.baseUrl}/programs/${programId}`,
+        programData,
+        {}
+      )
+      .subscribe((programData: ProgramInterface) => {
+        const program: ProgramInterface = {
+          title: name,
+          imagePath: programData.imagePath,
+          _id: programData._id,
+        };
+        this.programs.push(program);
+        this.programs$.next(this.programs);
+      });
   }
 
   deleteProgram(programId: string) {
-    return this.http.delete(`${this.baseUrl}/programs/${programId}`);
+    this.http.delete(`${this.baseUrl}/programs/${programId}`).subscribe(() => {
+      // Remove the deleted program from the local array
+      const index = this.programs.findIndex(
+        (program) => program._id === programId
+      );
+      if (index !== -1) {
+        this.programs.splice(index, 1);
+        this.programs$.next(this.programs);
+      }
+    });
   }
 
   createMuscleGroup(
