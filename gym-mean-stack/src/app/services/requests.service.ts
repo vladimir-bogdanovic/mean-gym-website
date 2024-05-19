@@ -111,7 +111,8 @@ export class RequestsService {
   }
 
   deleteProgram(programId: string) {
-    this.http.delete(`${this.baseUrl}/programs/${programId}`).subscribe(() => {
+    this.http.delete(`${this.baseUrl}/programs/${programId}`).subscribe((s) => {
+      console.log(s);
       // Remove the deleted program from the local array
       const index = this.programs.findIndex(
         (program) => program._id === programId

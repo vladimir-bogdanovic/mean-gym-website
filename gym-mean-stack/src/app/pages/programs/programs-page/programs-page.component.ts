@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { RequestsService } from '../../../services/requests.service';
 import { ProgramInterface } from '../../../models/program.model';
@@ -45,8 +51,14 @@ export class ProgramsPageComponent implements OnInit, OnDestroy {
   }
 
   deleteProgramOnClikc(programId: string) {
-    console.log(programId);
+    //  console.log(programId);
     this.requestsService.deleteProgram(programId);
+    this.programsSubscription = this.requestsService
+      .getProgramsStream()
+      .subscribe((programs: ProgramInterface[]) => {
+        this.programs = programs;
+        console.log(this.programs);
+      });
   }
 
   editProgramClick(programId: string | undefined) {

@@ -35,7 +35,6 @@ export class EditProgramComponent implements OnInit {
 
     this.route.params.subscribe((params: Params) => {
       this.programId = params?.['programId'];
-      console.log(this.programId);
     });
   }
 

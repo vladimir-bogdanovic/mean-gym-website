@@ -22,7 +22,7 @@ const storage = require("./helpers/storage");
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use("/images", express.static(path.join("images"))); // not sure wtf is this
+app.use("/images", express.static(path.join("images")));
 
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -280,7 +280,9 @@ app.delete("/programs/:programId", authenticate, storage, async (req, res) => {
       }
     });
 
-    res.send("Program and related data deleted successfully");
+    res
+      .status(200)
+      .json({ message: "Program and related data deleted successfully" });
   } catch (error) {
     console.error("Error deleting program and related data:", error);
     throw error; // Re-throw the error to be handled by the caller
