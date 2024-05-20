@@ -175,10 +175,10 @@ app.get("/users/me/access-token", verifySession, (req, res) => {
 app.post("/programs", authenticate, storage, async (req, res) => {
   try {
     const title = req.body.title;
-    if (!req.file) {
-      return res.status(400).send("No file uploaded.");
-    }
-    const imagePath = `http://localhost:3000/images/${req.file.filename}`;
+
+    const imagePath = req.file
+      ? `http://localhost:3000/images/${req.file.filename}`
+      : `http://localhost:3000/images/default-image.jpg`;
 
     let newProgram = new Program({
       title: title,
@@ -208,7 +208,10 @@ app.get("/programs", authenticate, (req, res) => {
 
 app.patch("/programs/:programId", authenticate, storage, async (req, res) => {
   try {
-    const imagePath = `http://localhost:3000/images/${req.file.filename}`;
+    // const imagePath = `http://localhost:3000/images/${req.file.filename}`;
+    const imagePath = req.file
+      ? `http://localhost:3000/images/${req.file.filename}`
+      : `http://localhost:3000/images/default-image.jpg`;
     const updatedProgram = await Program.findOneAndUpdate(
       {
         _id: req.params.programId,

@@ -24,12 +24,15 @@ export class NewProgramComponent implements OnInit {
 
   programForm!: FormGroup;
   imageData!: string;
+  defaultImg: string =
+    'https://variety.com/wp-content/uploads/2023/04/Twitter-Logo-Doge-Dogecoin.png';
 
   ngOnInit(): void {
     this.programForm = new FormGroup({
       name: new FormControl(null),
       image: new FormControl(null),
     });
+    //  this.imageData = this.defaultImg;
   }
 
   onSubmit() {
@@ -37,9 +40,6 @@ export class NewProgramComponent implements OnInit {
       this.programForm.value.name,
       this.programForm.value.image
     );
-    console.log(typeof this.programForm.value.image);
-    console.log(this.programForm.value.image);
-    console.log(this.programForm.value.name);
     this.programForm.reset();
     this.imageData = null!;
   }
@@ -48,8 +48,7 @@ export class NewProgramComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input && input.files && input.files.length > 0) {
       const file = input.files[0];
-      console.log(typeof file);
-      console.log(file);
+
       if (file && allowedFileTypes.includes(file.type)) {
         const reader = new FileReader();
         reader.onload = () => {

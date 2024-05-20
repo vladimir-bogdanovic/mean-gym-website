@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject, map } from 'rxjs';
 import { ProgramInterface } from '../models/program.model';
-import { Title } from '@angular/platform-browser';
 import { MuscleGroupInterface } from '../models/muscle-group.model';
 import { ExerciseInterface } from '../models/exercise.model';
 
@@ -17,6 +16,10 @@ export class RequestsService {
   constructor(private http: HttpClient) {}
 
   createProgram(name: string, image: any) {
+    if (!image) {
+      image = 'default-image';
+    }
+
     if (typeof image === 'string') {
       const blob = new Blob([image], { type: 'text/plain' });
       image = blob;
@@ -71,6 +74,10 @@ export class RequestsService {
   }
 
   editProgram(programId: string, name: string, image: any) {
+    if (!image) {
+      image = 'default-image';
+    }
+
     if (typeof image === 'string') {
       const blob = new Blob([image], { type: 'text/plain' });
       image = blob;
