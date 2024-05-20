@@ -1,0 +1,139 @@
+@import "../../main-styles.scss";
+////////////////////////////////////////////////////
+//
+
+.exercises-page-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.funcionalities-div-wrapper {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 0 40px;
+}
+
+//// FILTER
+
+.filter-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.button {
+  border-bottom-right-radius: 0px;
+  // na otvaranje menija dodati radis na bot left/right maybe
+}
+
+.filter-menu {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  display: none;
+}
+
+.filter-menu.show {
+  position: absolute;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: $light;
+  z-index: 5;
+  width: 300px;
+  max-width: 360px;
+  right: 0;
+  top: 100%;
+  border-radius: 5px 0 5px 5px;
+  border: solid 2px white;
+}
+
+.dropdown-items {
+  margin: 3px 0;
+  font-size: 16px;
+}
+
+////////////////////////////////////////////////////
+
+.exercises-page-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  margin-bottom: 140px;
+}
+
+// exercise-
+.exercises-title {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  color: $light;
+  font-size: 36px;
+  text-transform: uppercase;
+  text-decoration: underline;
+}
+
+.exercises-cards-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 2px;
+
+  .exercises-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 3px;
+
+    .exercise-card {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      flex-wrap: wrap;
+      width: 300px;
+      max-width: 350px;
+      background-color: $light;
+      border-radius: 8px;
+      border: solid 2px white;
+      margin: 10px;
+
+      .exercise-info {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-size: 20px;
+        // padding: 10px;
+        color: $primary;
+
+        p {
+          color: grey;
+          font-size: 15px;
+        }
+      }
+    }
+  }
+}
+
+.pagination-buttons {
+  display: flex;
+  margin-top: 10px;
+
+  flex-wrap: wrap;
+
+  button {
+    margin: 2px 7px;
+  }
+
+  span {
+    margin-top: 9px;
+    color: $light;
+  }
+}

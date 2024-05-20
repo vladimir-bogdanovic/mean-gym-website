@@ -1,0 +1,22 @@
+<div class="centered-content">
+  <div class="white-box">
+    <h1 class="title">Edit exercise</h1>
+
+    <input
+      [(ngModel)]="inputValue"
+      class="input has-background-light is-medium"
+      type="text"
+      placeholder="Enter new exercise name..."
+    />
+    <br /><br />
+    <div class="buttons is-right">
+      <button class="button is-medium" (click)="cancelButton()">Cancel</button>
+      <button
+        (click)="editExercise()"
+        class="button is-info has-text-white is-medium"
+      >
+        Edit
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,98 @@
+<div class="exercises-page-wrapper">
+  <div class="exercises-title">
+    <h1>default-exercises</h1>
+  </div>
+
+  <div class="funcionalities-div-wrapper">
+    <div class="search-container">
+      <form [formGroup]="searchForm">
+        <input
+          class="input is-info"
+          type="text"
+          placeholder="Search exercise..."
+          formControlName="searchParameters"
+        />
+      </form>
+    </div>
+
+    <!--filter start -->
+    <div class="filter-container">
+      <div (click)="toggleFilterMenu()" class="filter-button">
+        <button class="button">Filter by</button>
+      </div>
+      <div class="filter-menu" [ngClass]="{ show: isFilterMenuOpen }">
+        <!-- //start make child component start -->
+        <div class="dropdown-items">
+          <h2>All exercises</h2>
+        </div>
+        <div class="dropdown-items">
+          <app-dropdown-submenu
+            (FilteredData)="renderFilteredData($event)"
+            [title]="'Muscle Groups'"
+            [submenuOption]="muscleGroupsUnique"
+          ></app-dropdown-submenu>
+        </div>
+        <div class="dropdown-items">
+          <app-dropdown-submenu
+            [title]="'Equipment'"
+            [submenuOption]="EquipmentUnique"
+            (FilteredData)="renderFilteredData($event)"
+          ></app-dropdown-submenu>
+        </div>
+        <div class="dropdown-items">
+          <app-dropdown-submenu
+            [title]="'Intensity-lvls'"
+            [submenuOption]="intensityLvlUnique"
+            (FilteredData)="renderFilteredData($event)"
+          ></app-dropdown-submenu>
+        </div>
+      </div>
+
+      <!--filter end -->
+    </div>
+  </div>
+
+  <div class="exercises-cards-wrapper">
+    <div class="exercises-cards-container">
+      <div
+        *ngFor="
+          let exercise of exercises
+            | slice
+              : (currentPage - 1) * itemsPerPage
+              : (currentPage - 1) * itemsPerPage + itemsPerPage
+        "
+        class="exercise-card"
+      >
+        <div class="exercise-info">
+          <p>Exercise name:</p>
+          {{ exercise.WorkOut }}
+        </div>
+        <div class="exercise-info">
+          <p>Muscle Group name:</p>
+          {{ exercise.Muscles }}
+        </div>
+        <div class="exercise-info">
+          <p>Exercise video:</p>
+          <a [href]="exercise.Video"> {{ exercise.Video | shortenLink }}</a>
+        </div>
+      </div>
+      <div class="pagination-buttons">
+        <button
+          class="button is-link is-rounded is-right"
+          [disabled]="currentPage === 1"
+          (click)="onPageChange(currentPage - 1)"
+        >
+          Previous
+        </button>
+        <span>{{ currentPage }} / {{ totalPageCount }}</span>
+        <button
+          class="button is-link is-rounded is-right"
+          [disabled]="currentPage === totalPageCount"
+          (click)="onPageChange(currentPage + 1)"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

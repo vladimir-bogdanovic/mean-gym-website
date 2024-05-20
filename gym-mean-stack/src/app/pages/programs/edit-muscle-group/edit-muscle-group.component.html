@@ -1,0 +1,23 @@
+<div class="centered-content">
+  <div class="white-box">
+    <h1 class="title">Edit MG's</h1>
+
+    <input
+      [(ngModel)]="inputValue"
+      #listTitleInput
+      class="input has-background-light is-medium"
+      type="text"
+      placeholder="Enter new MG's name..."
+    />
+    <br /><br />
+    <div class="buttons is-right">
+      <button (click)="cancelButton()" class="button is-medium">Cancel</button>
+      <button
+        (click)="editMuscleGroup()"
+        class="button is-info has-text-white is-medium"
+      >
+        Create
+      </button>
+    </div>
+  </div>
+</div>

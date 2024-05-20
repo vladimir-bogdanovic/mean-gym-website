@@ -35,7 +35,7 @@
       <div class="top-bar">
         <h1 class="title has-text-primary">Exercises</h1>
         <div class="dropdown is-hoverable is-right">
-          <div class="dropdown-trigger" style="margin: 0">
+          <div class="dropdown-trigger">
             <button
               class="button"
               aria-haspopup="true"
@@ -48,8 +48,15 @@
           </div>
           <div class="dropdown-menu" id="dropdown-menu4" role="menu">
             <div class="dropdown-content">
-              <a class="dropdown-item"> Edit </a>
-              <a class="dropdown-item has-text-danger"> Delete </a>
+              <a (click)="editMuscleGroupClick()" class="dropdown-item">
+                Edit
+              </a>
+              <a
+                (click)="deleteMuscleGroup()"
+                class="dropdown-item has-text-danger"
+              >
+                Delete
+              </a>
             </div>
           </div>
         </div>
@@ -64,13 +71,17 @@
             {{ exercise.title }}
           </div>
           <div class="exercise-buttons">
-            <button class="button">
+            <button (click)="editExercicse(exercise._id)" class="button">
               <div class="icon">
                 <i class="fas fa-edit"></i>
               </div>
             </button>
 
-            <button class="button is-danger" style="margin-left: 10px">
+            <button
+              (click)="deleteExercise(exercise._id!)"
+              class="button is-danger"
+              style="margin-left: 10px"
+            >
               <div class="icon">
                 <i class="fas fa-trash"></i>
               </div>

@@ -1,46 +1,78 @@
-<h1>default-programs</h1>
+<div class="program-title">
+  <h1>default-programs</h1>
+</div>
+
 <div class="programs-content">
   <div class="programs">
     <!-- CARD START -->
     <div class="program-card">
-      <div class="img-div">
-        <img src="" alt="" />
+      <div class="program-img"></div>
+      <div class="program-name">
+        <p>program name:</p>
+        <h2>placeholder</h2>
       </div>
-      <div class="card-info">
-        <h3>title</h3>
-        <p>instructions</p>
+      <div class="program-buttons">
+        <button class="button is-link is-rounded is-right">check</button>
       </div>
     </div>
     <!-- CARD END -->
     <!-- CARD START -->
     <div class="program-card">
-      <div class="img-div">
-        <img src="" alt="" />
+      <div class="program-img"></div>
+      <div class="program-name">
+        <p>program name:</p>
+        <h2>placeholder</h2>
       </div>
-      <div class="card-info">
-        <h3>title</h3>
-        <p>instructions</p>
+      <div class="program-buttons">
+        <button class="button is-link is-rounded is-right">check</button>
       </div>
-      <!-- CARD END -->
     </div>
+    <!-- CARD END -->
   </div>
 </div>
 
-<h1>USER-programs</h1>
+<div class="program-title">
+  <h1>USER-programs</h1>
+</div>
+
 <div class="programs-content">
-  <div class="programs">
-    <!-- CARD START -->
+  <div *ngIf="programs" class="programs">
     <div *ngFor="let program of programs" class="program-card">
-      <div class="img-div">
-        <img src="" alt="" />
+      <div class="program-img">
+        <img [src]="program.imagePath" alt="" />
       </div>
-      <div (click)="goToSelectedProgram(program._id)" class="card-info">
-        <h3>{{ program.title }}</h3>
+
+      <div class="program-name">
+        <p>program name:</p>
+        <h2>{{ program.title }}</h2>
+      </div>
+      <div class="program-buttons">
+        <button
+          (click)="goToSelectedProgram(program._id)"
+          class="button is-link is-rounded is-right"
+        >
+          check
+        </button>
+        <button
+          (click)="editProgramClick(program._id)"
+          class="button is-link is-rounded"
+        >
+          edit
+        </button>
+        <button
+          (click)="deleteProgramOnClikc(program._id!)"
+          class="button is-link is-rounded is-right"
+        >
+          delete
+        </button>
       </div>
     </div>
+
     <!-- CARD END -->
-    <div>
-      <button (click)="addNewProgram()">Add new program</button>
+    <div class="add-new-program-div">
+      <button (click)="addNewProgram()" class="button is-link is-rounded">
+        Add new program
+      </button>
     </div>
   </div>
 </div>

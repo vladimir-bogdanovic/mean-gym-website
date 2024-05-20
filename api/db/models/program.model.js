@@ -12,6 +12,10 @@ const programSchema = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     required: true,
   },
+  imagePath: {
+    type: String,
+    required: true,
+  },
 });
 
 const Program = mongoose.model("Program", programSchema);

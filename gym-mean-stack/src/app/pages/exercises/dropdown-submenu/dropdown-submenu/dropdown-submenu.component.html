@@ -1,0 +1,16 @@
+<div
+  (mouseenter)="onFilterOptionEnter()"
+  (mouseleave)="onFilterOptionLeave()"
+  class="dropdown-items"
+>
+  <h2>{{ title }}</h2>
+  <div
+    class="filter-submenu"
+    [ngClass]="{ show: isFilterSubmenuOpen }"
+    *ngFor="let items of submenuOption"
+  >
+    <ul>
+      <li (click)="getSelectedItem(items)">{{ items }}</li>
+    </ul>
+  </div>
+</div>

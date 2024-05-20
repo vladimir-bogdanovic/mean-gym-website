@@ -22,13 +22,15 @@ export class ProgramViewComponent implements OnInit {
 
   programId!: string;
   muscleGroupId!: string;
+  exerciseId!: string;
   muscleGroups!: MuscleGroupInterface[];
   exercises!: ExerciseInterface[];
   programTitle!: string | undefined;
 
   ngOnInit(): void {
+    this.requestsService.getPrograms();
     this.requestsService
-      .getPrograms()
+      .getProgramsStream()
       .subscribe((programs: ProgramInterface[]) => {
         programs.filter((program: ProgramInterface) => {
           if (program._id === this.programId) {
@@ -69,6 +71,32 @@ export class ProgramViewComponent implements OnInit {
       `programs/${this.programId}/mg-lists/${this.muscleGroupId}/new-exercise`,
     ]);
   }
-}
 
-// tomorow fix css in programs-page and add edit/delete buttons
+  editMuscleGroupClick() {
+    this.router.navigate([
+      `programs/${this.programId}/mg-lists/${this.muscleGroupId}/edit-muscle-group`,
+    ]);
+  }
+
+  deleteMuscleGroup() {
+    this.requestsService
+      .deleteMuscleGroup(this.programId, this.muscleGroupId)
+      .subscribe(() => {
+        console.log('d');
+      });
+  }
+
+  editExercicse(exerciseID: string | undefined) {
+    this.router.navigate([
+      `programs/${this.programId}/mg-lists/${this.muscleGroupId}/exercises/${exerciseID}/edit-exercise`,
+    ]);
+  }
+
+  deleteExercise(exerciseId: string) {
+    this.requestsService
+      .deleteExercise(this.programId, this.muscleGroupId, exerciseId)
+      .subscribe(() => {
+        console.log('exercise deleted');
+      });
+  }
+}

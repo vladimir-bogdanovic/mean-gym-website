@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject, map } from 'rxjs';
 import { ProgramInterface } from '../models/program.model';
-import { Title } from '@angular/platform-browser';
 import { MuscleGroupInterface } from '../models/muscle-group.model';
 import { ExerciseInterface } from '../models/exercise.model';
 
@@ -11,17 +10,125 @@ import { ExerciseInterface } from '../models/exercise.model';
 })
 export class RequestsService {
   baseUrl = 'http://localhost:3000';
+  private programs: ProgramInterface[] = [];
+  private programs$ = new Subject<ProgramInterface[]>();
 
   constructor(private http: HttpClient) {}
 
-  createProgram(programName: string): Observable<ProgramInterface> {
-    return this.http.post<ProgramInterface>(`${this.baseUrl}/programs`, {
-      title: programName,
-    });
+  createProgram(name: string, image: any) {
+    if (!image) {
+      image = 'default-image';
+    }
+
+    if (typeof image === 'string') {
+      const blob = new Blob([image], { type: 'text/plain' });
+      image = blob;
+      console.log(image);
+    }
+    if (!(image instanceof File || image instanceof Blob)) {
+      console.error(
+        'The provided image is not a Blob or File. Received:',
+        typeof image
+      );
+      throw new Error('The provided image is not a Blob or File.');
+    }
+    // Create FormData object
+    const programData = new FormData();
+    programData.append('title', name);
+    // Handle different types of image input
+    if (image instanceof File) {
+      programData.append('image', image, image.name);
+    } else {
+      // If image is not a File, assume it's a Blob
+      programData.append('image', image, 'image.txt');
+    }
+    this.http
+      .post<ProgramInterface>(`${this.baseUrl}/programs`, programData, {})
+      .subscribe((programData: ProgramInterface) => {
+        const program: ProgramInterface = {
+          title: name,
+          imagePath: programData.imagePath,
+          _id: programData._id,
+        };
+        this.programs.push(program);
+        this.programs$.next(this.programs);
+      });
   }
 
-  getPrograms(): Observable<ProgramInterface[]> {
-    return this.http.get<ProgramInterface[]>(`${this.baseUrl}/programs`);
+  getPrograms() {
+    this.http
+      .get<ProgramInterface[]>(`${this.baseUrl}/programs`)
+      .pipe(
+        map((programData) => {
+          return programData;
+        })
+      )
+      .subscribe((programs: ProgramInterface[]) => {
+        this.programs = programs;
+        this.programs$.next(this.programs);
+      });
+  }
+
+  getProgramsStream() {
+    return this.programs$.asObservable();
+  }
+
+  editProgram(programId: string, name: string, image: any) {
+    if (!image) {
+      image = 'default-image';
+    }
+
+    if (typeof image === 'string') {
+      const blob = new Blob([image], { type: 'text/plain' });
+      image = blob;
+      console.log(image);
+    }
+    if (!(image instanceof File || image instanceof Blob)) {
+      console.error(
+        'The provided image is not a Blob or File. Received:',
+        typeof image
+      );
+      throw new Error('The provided image is not a Blob or File.');
+    }
+    // Create FormData object
+    const programData = new FormData();
+    programData.append('title', name);
+    // Handle different types of image input
+    if (image instanceof File) {
+      programData.append('image', image, image.name);
+    } else {
+      // If image is not a File, assume it's a Blob
+      programData.append('image', image, 'image.txt');
+    }
+    this.http
+      .patch<ProgramInterface>(
+        `${this.baseUrl}/programs/${programId}`,
+        programData,
+        {}
+      )
+      .subscribe((programData: ProgramInterface) => {
+        const program: ProgramInterface = {
+          title: name,
+          imagePath: programData.imagePath,
+          _id: programData._id,
+        };
+        this.programs.push(program);
+        this.programs$.next(this.programs);
+      });
+  }
+
+  deleteProgram(programId: string) {
+    this.http.delete(`${this.baseUrl}/programs/${programId}`).subscribe((s) => {
+      console.log(s);
+      // Remove the deleted program from the local array
+      const index = this.programs.findIndex(
+        (program) => program._id === programId
+      );
+      if (index !== -1) {
+        this.programs.splice(index, 1);
+        this.programs$.next(this.programs);
+      }
+    });
   }
 
   createMuscleGroup(
@@ -42,6 +149,23 @@ export class RequestsService {
     );
   }
 
+  editMuscleGroup(
+    programId: string,
+    mgId: string,
+    newTitle: string
+  ): Observable<MuscleGroupInterface> {
+    return this.http.patch<MuscleGroupInterface>(
+      `${this.baseUrl}/programs/${programId}/mg-lists/${mgId}`,
+      { title: newTitle }
+    );
+  }
+
+  deleteMuscleGroup(programId: string, mgListId: string) {
+    return this.http.delete(
+      `${this.baseUrl}/programs/${programId}/mg-lists/${mgListId}`
+    );
+  }
+
   createExercise(
     progrmasId: string,
     mgListId: string,
@@ -59,6 +183,24 @@ export class RequestsService {
   ): Observable<ExerciseInterface[]> {
     return this.http.get<ExerciseInterface[]>(
       `${this.baseUrl}/programs/${progrmasId}/mg-lists/${mgListId}/exercises`
+    );
+  }
+
+  editExercise(
+    progrmasId: string,
+    mgListId: string,
+    exerciseId: string,
+    newTitle: string
+  ): Observable<ExerciseInterface> {
+    return this.http.patch<ExerciseInterface>(
+      `${this.baseUrl}/programs/${progrmasId}/mg-lists/${mgListId}/exercises/${exerciseId}`,
+      { title: newTitle }
+    );
+  }
+
+  deleteExercise(programId: string, mgListId: string, exerciseId: string) {
+    return this.http.delete(
+      `${this.baseUrl}/programs/${programId}/mg-lists/${mgListId}/exercises/${exerciseId}`
     );
   }
 
