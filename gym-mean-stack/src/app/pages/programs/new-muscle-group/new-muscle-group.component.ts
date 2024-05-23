@@ -1,5 +1,10 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { RequestsService } from '../../../services/requests.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { MuscleGroupInterface } from '../../../models/muscle-group.model';
@@ -7,13 +12,14 @@ import { MuscleGroupInterface } from '../../../models/muscle-group.model';
 @Component({
   selector: 'app-new-muscle-group',
   standalone: true,
-  imports: [FormsModule],
+  imports: [ReactiveFormsModule, FormsModule],
   templateUrl: './new-muscle-group.component.html',
   styleUrl: './new-muscle-group.component.scss',
 })
-export class NewMuscleGroupComponent {
-  inputValue!: string;
+export class NewMuscleGroupComponent implements OnInit {
   programId!: string;
+  mgId!: string | undefined;
+  muscleGroupForm!: FormGroup;
 
   constructor(
     private requestsService: RequestsService,
@@ -21,16 +27,26 @@ export class NewMuscleGroupComponent {
     private router: Router
   ) {}
 
-  createNewMuscle() {
+  ngOnInit(): void {
     this.route.params.subscribe((param: Params) => {
       this.programId = param?.['programId'];
     });
 
-    this.requestsService
-      .createMuscleGroup(this.programId, this.inputValue)
-      .subscribe((muscleGroup: MuscleGroupInterface) => {
-        console.log(muscleGroup);
-        this.router.navigate([`programs/${this.programId}/mg-lists`]);
-      });
+    this.muscleGroupForm = new FormGroup({
+      muscleName: new FormControl(null),
+    });
+  }
+
+  onSubmit() {
+    this.requestsService.createMuscleGroup(
+      this.programId,
+      this.muscleGroupForm.value.muscleName
+    );
+    // this.requestsService.getMuscleGroupsStream().subscribe();
+    this.router.navigate([`programs/${this.programId}/mg-lists`]);
+  }
+
+  cancelClick() {
+    this.router.navigate([`programs/${this.programId}/mg-lists`]);
   }
 }

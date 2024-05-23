@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RequestsService } from '../../../services/requests.service';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { ActivatedRoute, Params, Router, RouterModule } from '@angular/router';
 import { MuscleGroupInterface } from '../../../models/muscle-group.model';
 import { ExerciseInterface } from '../../../models/exercise.model';
 import { ProgramInterface } from '../../../models/program.model';
+import { Subscription, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-program-view',
@@ -13,7 +14,7 @@ import { ProgramInterface } from '../../../models/program.model';
   templateUrl: './program-view.component.html',
   styleUrl: './program-view.component.scss',
 })
-export class ProgramViewComponent implements OnInit {
+export class ProgramViewComponent implements OnInit, OnDestroy {
   constructor(
     private requestsService: RequestsService,
     private router: Router,
@@ -23,9 +24,12 @@ export class ProgramViewComponent implements OnInit {
   programId!: string;
   muscleGroupId!: string;
   exerciseId!: string;
+
   muscleGroups!: MuscleGroupInterface[];
   exercises!: ExerciseInterface[];
   programTitle!: string | undefined;
+
+  muscleGroupsSubscription!: Subscription;
 
   ngOnInit(): void {
     this.requestsService.getPrograms();
@@ -35,7 +39,7 @@ export class ProgramViewComponent implements OnInit {
         programs.filter((program: ProgramInterface) => {
           if (program._id === this.programId) {
             this.programTitle = program.title;
-            console.log(this.programTitle);
+            //   console.log(this.programTitle);
           }
         });
       });
@@ -43,18 +47,21 @@ export class ProgramViewComponent implements OnInit {
     this.route.params.subscribe((params: Params) => {
       this.programId = params?.['programId'];
 
-      this.requestsService
-        .getMuscleGroup(this.programId)
-        .subscribe((mgList: MuscleGroupInterface[]) => {
-          this.muscleGroups = mgList;
+      this.requestsService.getMuscleGroup(this.programId);
+      this.muscleGroupsSubscription = this.requestsService
+        .getMuscleGroupsStream()
+        .subscribe((muscleGroups: MuscleGroupInterface[]) => {
+          this.muscleGroups = muscleGroups;
+          console.log(this.muscleGroups);
         });
 
       if ((this.muscleGroupId = params?.['mgListId'])) {
+        //   console.log('asdas', this.muscleGroupId);
         this.requestsService
           .getExercises(this.programId, this.muscleGroupId)
           .subscribe((exercises) => {
             this.exercises = exercises;
-            console.log(exercises);
+            //   console.log(exercises);
           });
       } else {
         this.exercises = undefined!;
@@ -79,16 +86,19 @@ export class ProgramViewComponent implements OnInit {
   }
 
   deleteMuscleGroup() {
+    console.log('deleteing muscle group');
+    this.requestsService.deleteMuscleGroup(this.programId, this.muscleGroupId);
     this.requestsService
-      .deleteMuscleGroup(this.programId, this.muscleGroupId)
-      .subscribe(() => {
-        console.log('d');
+      .getMuscleGroupsStream()
+      .pipe(switchMap(() => this.requestsService.getMuscleGroupsStream()))
+      .subscribe((muscleGroups: MuscleGroupInterface[]) => {
+        this.muscleGroups = muscleGroups;
       });
   }
 
-  editExercicse(exerciseID: string | undefined) {
+  editExercicse(exerciseId: string | undefined) {
     this.router.navigate([
-      `programs/${this.programId}/mg-lists/${this.muscleGroupId}/exercises/${exerciseID}/edit-exercise`,
+      `programs/${this.programId}/mg-lists/${this.muscleGroupId}/exercises/${exerciseId}/edit-exercise`,
     ]);
   }
 
@@ -98,5 +108,9 @@ export class ProgramViewComponent implements OnInit {
       .subscribe(() => {
         console.log('exercise deleted');
       });
+  }
+
+  ngOnDestroy(): void {
+    this.muscleGroupsSubscription.unsubscribe();
   }
 }

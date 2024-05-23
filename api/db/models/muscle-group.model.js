@@ -6,7 +6,7 @@ const muscleSchema = new mongoose.Schema({
     required: true,
     minlength: 1,
     trim: true,
-    unique: true,
+    unique: false,
   },
   _programId: {
     type: mongoose.Types.ObjectId,

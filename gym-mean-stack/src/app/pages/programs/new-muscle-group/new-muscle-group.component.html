@@ -1,23 +1,20 @@
 <div class="centered-content">
   <div class="white-box">
     <h1 class="title">Create new MG's</h1>
-
-    <input
-      [(ngModel)]="inputValue"
-      #listTitleInput
-      class="input has-background-light is-medium"
-      type="text"
-      placeholder="Enter Mucle-group's name..."
-    />
-    <br /><br />
-    <div class="buttons is-right">
-      <button class="button is-medium" routerLink="/">Cancel</button>
-      <button
-        (click)="createNewMuscle()"
-        class="button is-info has-text-white is-medium"
-      >
-        Create
-      </button>
-    </div>
+    <form [formGroup]="muscleGroupForm" (ngSubmit)="onSubmit()">
+      <input
+        class="input has-background-light is-medium"
+        type="text"
+        placeholder="Enter Mucle-group's name..."
+        formControlName="muscleName"
+      />
+      <br /><br />
+      <div class="buttons is-right">
+        <button class="button is-medium" (click)="cancelClick()">Cancel</button>
+        <button type="submit" class="button is-info has-text-white is-medium">
+          Create
+        </button>
+      </div>
+    </form>
   </div>
 </div>

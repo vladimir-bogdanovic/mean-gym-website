@@ -42,6 +42,8 @@ export class NewProgramComponent implements OnInit {
     );
     this.programForm.reset();
     this.imageData = null!;
+
+    this.router.navigate(['/programs']);
   }
   onFileSelected(event: Event) {
     const allowedFileTypes = ['image/png', 'image/jpeg', 'image/jpg'];

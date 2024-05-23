@@ -38,10 +38,6 @@ export class ProgramsPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy(): void {
-    this.programsSubscription.unsubscribe();
-  }
-
   addNewProgram() {
     this.router.navigate(['new-program']);
   }
@@ -63,6 +59,10 @@ export class ProgramsPageComponent implements OnInit, OnDestroy {
 
   editProgramClick(programId: string | undefined) {
     this.router.navigate([`programs/${programId}`]);
+  }
+
+  ngOnDestroy(): void {
+    this.programsSubscription.unsubscribe();
   }
 }
 
