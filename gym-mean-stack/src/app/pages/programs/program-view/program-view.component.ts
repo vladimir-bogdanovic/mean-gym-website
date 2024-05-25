@@ -57,12 +57,10 @@ export class ProgramViewComponent implements OnInit, OnDestroy {
 
       if ((this.muscleGroupId = params?.['mgListId'])) {
         //   console.log('asdas', this.muscleGroupId);
-        this.requestsService
-          .getExercises(this.programId, this.muscleGroupId)
-          .subscribe((exercises) => {
-            this.exercises = exercises;
-            //   console.log(exercises);
-          });
+        this.requestsService.getExercises(this.programId, this.muscleGroupId);
+        this.requestsService.getExercisesStream().subscribe((exercises) => {
+          this.exercises = exercises;
+        });
       } else {
         this.exercises = undefined!;
       }

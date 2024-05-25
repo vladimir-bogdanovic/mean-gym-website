@@ -1,20 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { RequestsService } from '../../../services/requests.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-edit-exercise',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, ReactiveFormsModule],
   templateUrl: './edit-exercise.component.html',
   styleUrl: './edit-exercise.component.scss',
 })
 export class EditExerciseComponent implements OnInit {
-  inputValue!: string;
   programId!: string;
   muscleGroupId!: string;
   exerciseId!: string;
+  exerciseForm!: FormGroup;
 
   constructor(
     private requestsService: RequestsService,
@@ -28,24 +33,29 @@ export class EditExerciseComponent implements OnInit {
       this.muscleGroupId = param?.['mgListId'];
       this.exerciseId = param?.['exerciseId'];
     });
+
+    this.exerciseForm = new FormGroup({
+      exerciseName: new FormControl(null),
+    });
   }
 
-  editExercise() {
-    this.requestsService
-      .editExercise(
-        this.programId,
-        this.muscleGroupId,
-        this.exerciseId,
-        this.inputValue
-      )
-      .subscribe(() => {
-        this.router.navigate([
-          `programs/${this.programId}/mg-lists/${this.muscleGroupId}/exercises/${this.exerciseId}`,
-        ]);
-      });
+  onSubmit() {
+    console.log('sda');
+    this.requestsService.editExercise(
+      this.programId,
+      this.muscleGroupId,
+      this.exerciseId,
+      this.exerciseForm.value.exerciseName
+    );
+    this.requestsService.getExercisesStream().subscribe();
+    this.router.navigate([
+      `programs/${this.programId}/mg-lists/${this.muscleGroupId}/exercises`,
+    ]);
   }
 
   cancelButton() {
-    this.router.navigate(['../'], { relativeTo: this.route });
+    this.router.navigate([
+      `programs/${this.programId}/mg-lists/${this.muscleGroupId}/exercises`,
+    ]);
   }
 }

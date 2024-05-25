@@ -219,41 +219,68 @@ export class RequestsService {
   // EXERCISES
 
   ///////////////////// POST EXERCISE /////////////////////
-  createExercise(
-    progrmasId: string,
-    mgListId: string,
-    exerTitle: string
-  ): Observable<ExerciseInterface> {
-    return this.http.post<ExerciseInterface>(
-      `${this.baseUrl}/programs/${progrmasId}/mg-lists/${mgListId}/exercises`,
-      { title: exerTitle }
-    );
+  createExercise(progrmasId: string, mgListId: string, exerTitle: string) {
+    this.http
+      .post<ExerciseInterface>(
+        `${this.baseUrl}/programs/${progrmasId}/mg-lists/${mgListId}/exercises`,
+        { title: exerTitle }
+      )
+      .subscribe((exercise: ExerciseInterface) => {
+        const newExercise: ExerciseInterface = {
+          title: exerTitle,
+          _id: exercise._id,
+          _muscleId: exercise._muscleId,
+        };
+        this.exercises.push(newExercise);
+        this.exercises$.next(this.exercises);
+      });
   }
 
-  ///////////////////// POST /////////////////////
-  getExercises(
-    progrmasId: string,
-    mgListId: string
-  ): Observable<ExerciseInterface[]> {
-    return this.http.get<ExerciseInterface[]>(
-      `${this.baseUrl}/programs/${progrmasId}/mg-lists/${mgListId}/exercises`
-    );
+  ///////////////////// GET EXERCISE /////////////////////
+  getExercises(progrmasId: string, mgListId: string) {
+    this.http
+      .get<ExerciseInterface[]>(
+        `${this.baseUrl}/programs/${progrmasId}/mg-lists/${mgListId}/exercises`
+      )
+      .subscribe((exercises: ExerciseInterface[]) => {
+        this.exercises = exercises;
+        this.exercises$.next(this.exercises);
+      });
   }
 
-  ///////////////////// POST /////////////////////
+  getExercisesStream() {
+    return this.exercises$.asObservable();
+  }
+
+  ///////////////////// UPDATE EXERCISE /////////////////////
   editExercise(
     progrmasId: string,
     mgListId: string,
     exerciseId: string,
     newTitle: string
-  ): Observable<ExerciseInterface> {
-    return this.http.patch<ExerciseInterface>(
-      `${this.baseUrl}/programs/${progrmasId}/mg-lists/${mgListId}/exercises/${exerciseId}`,
-      { title: newTitle }
-    );
+  ) {
+    this.http
+      .patch<ExerciseInterface>(
+        `${this.baseUrl}/programs/${progrmasId}/mg-lists/${mgListId}/exercises/${exerciseId}`,
+        { title: newTitle }
+      )
+      .subscribe((exercise: ExerciseInterface) => {
+        const index = this.exercises.findIndex(
+          (exer: ExerciseInterface) => exer._id === exerciseId
+        );
+        if (index !== -1) {
+          this.exercises[index] = {
+            _id: exercise._id,
+            title: exercise.title,
+            _muscleId: exercise._muscleId,
+          };
+        }
+
+        this.muscleGroups$.next(this.muscleGroups);
+      });
   }
 
-  ///////////////////// POST /////////////////////
+  ///////////////////// DELETE EXERCISE /////////////////////
   deleteExercise(programId: string, mgListId: string, exerciseId: string) {
     return this.http.delete(
       `${this.baseUrl}/programs/${programId}/mg-lists/${mgListId}/exercises/${exerciseId}`
