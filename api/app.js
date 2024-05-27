@@ -208,7 +208,6 @@ app.get("/programs", authenticate, (req, res) => {
 
 app.patch("/programs/:programId", authenticate, storage, async (req, res) => {
   try {
-    // const imagePath = `http://localhost:3000/images/${req.file.filename}`;
     const imagePath = req.file
       ? `http://localhost:3000/images/${req.file.filename}`
       : `http://localhost:3000/images/default-image.jpg`;
@@ -393,7 +392,7 @@ app.delete(
         console.log("Muscle group not found :", req.params.mgListId);
       }
 
-      res.send("Muscle group deleted successfully");
+      res.status(200).send({ message: "Muscle group deleted successfully" });
     } catch (error) {
       console.error("Error deleting muscle group:", error);
       res.status(500).send(error.message);
@@ -413,7 +412,7 @@ app.post(
         _userId: req.user_id,
       });
       if (!program) {
-        res.status(404).send("Program notddd found");
+        res.status(404).send("Program not found");
         return;
       }
 
@@ -501,7 +500,7 @@ app.delete(
         _userId: req.user_id,
       });
       if (!program) {
-        res.status(404).send("program not found");
+        return res.status(404).send("program not found");
       }
 
       const muscleGroup = await MuscleGroup.findOne({
@@ -509,7 +508,7 @@ app.delete(
         _programId: req.params.programsId,
       });
       if (!muscleGroup) {
-        res.status(404).send("muscle group not found");
+        return res.status(404).send("muscle group not found");
       }
 
       const exercise = await Exercise.findByIdAndDelete({
@@ -517,13 +516,12 @@ app.delete(
         _muscleId: req.params.mgListId,
       });
       if (!exercise) {
-        res.status(404).send("exercise not found");
+        return res.status(404).send("exercise not found");
       }
 
-      const deletedExercise = await exercise.save();
-      res.send(deletedExercise);
+      return res.send(exercise);
     } catch (error) {
-      res.status(500).send(error);
+      return res.status(500).send(error);
     }
   }
 );

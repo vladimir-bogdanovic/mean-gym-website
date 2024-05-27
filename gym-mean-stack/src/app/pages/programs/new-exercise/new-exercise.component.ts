@@ -1,20 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RequestsService } from '../../../services/requests.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ExerciseInterface } from '../../../models/exercise.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-new-exercise',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, ReactiveFormsModule],
   templateUrl: './new-exercise.component.html',
   styleUrl: './new-exercise.component.scss',
 })
-export class NewExerciseComponent {
-  inputValue!: string;
+export class NewExerciseComponent implements OnInit, OnDestroy {
   programId!: string;
   muscleGroupId!: string;
+  exerciseForm!: FormGroup;
+
+  exercisesSubscription: Subscription = new Subscription();
 
   constructor(
     private requestsService: RequestsService,
@@ -22,18 +30,43 @@ export class NewExerciseComponent {
     private router: Router
   ) {}
 
-  createNewExercise() {
+  ngOnInit(): void {
     this.route.params.subscribe((param: Params) => {
       this.programId = param?.['programId'];
       this.muscleGroupId = param?.['mgListId'];
     });
 
-    this.requestsService
-      .createExercise(this.programId, this.muscleGroupId, this.inputValue)
-      .subscribe((exercise: ExerciseInterface) => {
-        this.router.navigate([
-          `programs/${this.programId}/mg-lists/${this.muscleGroupId}/exercises/${exercise._id}`,
-        ]);
+    this.exerciseForm = new FormGroup({
+      exerciseName: new FormControl(null),
+    });
+  }
+
+  onSubmit() {
+    console.log('submiting form');
+    this.requestsService.createExercise(
+      this.programId,
+      this.muscleGroupId,
+      this.exerciseForm.value.exerciseName
+    );
+    this.exercisesSubscription = this.requestsService
+      .getExercisesStream()
+      .subscribe((exercises: ExerciseInterface[]) => {
+        exercises.filter((exercise: ExerciseInterface) => {
+          this.router.navigate([
+            `programs/${this.programId}/mg-lists/${this.muscleGroupId}/exercises/${exercise._id}`,
+          ]);
+        });
       });
+    console.log(this.exerciseForm.value.exerciseName);
+  }
+
+  cancelButton() {
+    this.router.navigate([
+      `programs/${this.programId}/mg-lists/${this.muscleGroupId}/exercises`,
+    ]);
+  }
+
+  ngOnDestroy(): void {
+    this.exercisesSubscription.unsubscribe();
   }
 }
