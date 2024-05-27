@@ -22,6 +22,8 @@ import { Subscription } from 'rxjs';
 export class ProgramsPageComponent implements OnInit, OnDestroy {
   programs!: ProgramInterface[];
   private programsSubscription!: Subscription;
+  muscleGroupsSubscription!: Subscription;
+  exercisesSubscription!: Subscription;
 
   constructor(
     private router: Router,
@@ -62,12 +64,8 @@ export class ProgramsPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.programsSubscription.unsubscribe();
+    if (this.programsSubscription) {
+      this.programsSubscription.unsubscribe();
+    }
   }
 }
-
-// u editu user dodaje sliku ako zeli u suprotnom kartica ce imati difoltnu sliku
-// takodje u new program   -||-
-// uradjen primemr u mongo db vezbba projektu
-// cancel ne radi svuda
-// treba izmeniti objekte (program. mg, exer) - dodati nove propertije kao na promer sliku ili tako nesto a exercise ce imati sve propertije kao i exercise u gymAPiju

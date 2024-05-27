@@ -7,7 +7,6 @@ import {
 } from '@angular/forms';
 import { RequestsService } from '../../../services/requests.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { MuscleGroupInterface } from '../../../models/muscle-group.model';
 
 @Component({
   selector: 'app-new-muscle-group',
@@ -42,7 +41,6 @@ export class NewMuscleGroupComponent implements OnInit {
       this.programId,
       this.muscleGroupForm.value.muscleName
     );
-    // this.requestsService.getMuscleGroupsStream().subscribe();
     this.router.navigate([`programs/${this.programId}/mg-lists`]);
   }
 

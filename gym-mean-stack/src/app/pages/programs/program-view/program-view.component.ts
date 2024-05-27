@@ -27,19 +27,22 @@ export class ProgramViewComponent implements OnInit, OnDestroy {
 
   muscleGroups!: MuscleGroupInterface[];
   exercises!: ExerciseInterface[];
-  programTitle!: string | undefined;
 
+  programTitle!: string | undefined;
+  muscleGroupTitle!: string | undefined;
+
+  programsSubscription!: Subscription;
   muscleGroupsSubscription!: Subscription;
+  exercisesSubscription!: Subscription;
 
   ngOnInit(): void {
     this.requestsService.getPrograms();
-    this.requestsService
+    this.programsSubscription = this.requestsService
       .getProgramsStream()
       .subscribe((programs: ProgramInterface[]) => {
         programs.filter((program: ProgramInterface) => {
           if (program._id === this.programId) {
             this.programTitle = program.title;
-            //   console.log(this.programTitle);
           }
         });
       });
@@ -52,15 +55,21 @@ export class ProgramViewComponent implements OnInit, OnDestroy {
         .getMuscleGroupsStream()
         .subscribe((muscleGroups: MuscleGroupInterface[]) => {
           this.muscleGroups = muscleGroups;
+          muscleGroups.filter((muscleGroups: ProgramInterface) => {
+            if (muscleGroups._id === this.muscleGroupId) {
+              this.muscleGroupTitle = muscleGroups.title;
+            }
+          });
           console.log(this.muscleGroups);
         });
 
       if ((this.muscleGroupId = params?.['mgListId'])) {
-        //   console.log('asdas', this.muscleGroupId);
         this.requestsService.getExercises(this.programId, this.muscleGroupId);
-        this.requestsService.getExercisesStream().subscribe((exercises) => {
-          this.exercises = exercises;
-        });
+        this.exercisesSubscription = this.requestsService
+          .getExercisesStream()
+          .subscribe((exercises) => {
+            this.exercises = exercises;
+          });
       } else {
         this.exercises = undefined!;
       }
@@ -77,7 +86,7 @@ export class ProgramViewComponent implements OnInit, OnDestroy {
     ]);
   }
 
-  editMuscleGroupClick() {
+  editMuscleGroup() {
     this.router.navigate([
       `programs/${this.programId}/mg-lists/${this.muscleGroupId}/edit-muscle-group`,
     ]);
@@ -86,7 +95,7 @@ export class ProgramViewComponent implements OnInit, OnDestroy {
   deleteMuscleGroup() {
     console.log('deleteing muscle group');
     this.requestsService.deleteMuscleGroup(this.programId, this.muscleGroupId);
-    this.requestsService
+    this.muscleGroupsSubscription = this.requestsService
       .getMuscleGroupsStream()
       .pipe(switchMap(() => this.requestsService.getMuscleGroupsStream()))
       .subscribe((muscleGroups: MuscleGroupInterface[]) => {
@@ -101,14 +110,28 @@ export class ProgramViewComponent implements OnInit, OnDestroy {
   }
 
   deleteExercise(exerciseId: string) {
-    this.requestsService
-      .deleteExercise(this.programId, this.muscleGroupId, exerciseId)
-      .subscribe(() => {
-        console.log('exercise deleted');
+    this.requestsService.deleteExercise(
+      this.programId,
+      this.muscleGroupId,
+      exerciseId
+    );
+    this.exercisesSubscription = this.requestsService
+      .getExercisesStream()
+      .pipe(switchMap(() => this.requestsService.getExercisesStream()))
+      .subscribe((exercises: ExerciseInterface[]) => {
+        this.exercises = exercises;
       });
   }
 
   ngOnDestroy(): void {
-    this.muscleGroupsSubscription.unsubscribe();
+    if (this.programsSubscription) {
+      this.programsSubscription.unsubscribe();
+    }
+    if (this.muscleGroupsSubscription) {
+      this.muscleGroupsSubscription.unsubscribe();
+    }
+    if (this.exercisesSubscription) {
+      this.exercisesSubscription.unsubscribe();
+    }
   }
 }

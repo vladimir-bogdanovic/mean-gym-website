@@ -282,9 +282,19 @@ export class RequestsService {
 
   ///////////////////// DELETE EXERCISE /////////////////////
   deleteExercise(programId: string, mgListId: string, exerciseId: string) {
-    return this.http.delete(
-      `${this.baseUrl}/programs/${programId}/mg-lists/${mgListId}/exercises/${exerciseId}`
-    );
+    this.http
+      .delete(
+        `${this.baseUrl}/programs/${programId}/mg-lists/${mgListId}/exercises/${exerciseId}`
+      )
+      .subscribe(() => {
+        const index = this.exercises.findIndex(
+          (exer: ExerciseInterface) => exer._id === exerciseId
+        );
+        if (index !== -1) {
+          this.exercises.splice(index, 1);
+          this.exercises$.next(this.exercises);
+        }
+      });
   }
 
   ///////////////////// POST /////////////////////

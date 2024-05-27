@@ -500,7 +500,7 @@ app.delete(
         _userId: req.user_id,
       });
       if (!program) {
-        res.status(404).send("program not found");
+        return res.status(404).send("program not found");
       }
 
       const muscleGroup = await MuscleGroup.findOne({
@@ -508,7 +508,7 @@ app.delete(
         _programId: req.params.programsId,
       });
       if (!muscleGroup) {
-        res.status(404).send("muscle group not found");
+        return res.status(404).send("muscle group not found");
       }
 
       const exercise = await Exercise.findByIdAndDelete({
@@ -516,13 +516,12 @@ app.delete(
         _muscleId: req.params.mgListId,
       });
       if (!exercise) {
-        res.status(404).send("exercise not found");
+        return res.status(404).send("exercise not found");
       }
 
-      const deletedExercise = await exercise.save();
-      res.send(deletedExercise);
+      return res.send(exercise);
     } catch (error) {
-      res.status(500).send(error);
+      return res.status(500).send(error);
     }
   }
 );

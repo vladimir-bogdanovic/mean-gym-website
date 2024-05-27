@@ -33,7 +33,7 @@
 
     <div class="exercises-list-container has-background-light">
       <div class="top-bar">
-        <h1 class="title has-text-primary">Exercises</h1>
+        <h1 class="title has-text-primary">Muscle : {{ muscleGroupTitle }}</h1>
         <div class="dropdown is-hoverable is-right">
           <div class="dropdown-trigger">
             <button
@@ -48,9 +48,7 @@
           </div>
           <div class="dropdown-menu" id="dropdown-menu4" role="menu">
             <div class="dropdown-content">
-              <a (click)="editMuscleGroupClick()" class="dropdown-item">
-                Edit
-              </a>
+              <a (click)="editMuscleGroup()" class="dropdown-item"> Edit </a>
               <a
                 (click)="deleteMuscleGroup()"
                 class="dropdown-item has-text-danger"
@@ -62,11 +60,7 @@
         </div>
       </div>
       <div *ngIf="exercises">
-        <div
-          class="exercise"
-          *ngFor="let exercise of exercises"
-          [ngClass]="{ completed: exercise.completed }"
-        >
+        <div class="exercise" *ngFor="let exercise of exercises">
           <div class="exercise-text">
             {{ exercise.title }}
           </div>
@@ -90,10 +84,11 @@
         </div>
       </div>
       <h3 class="no-content-title" *ngIf="exercises?.length === 0">
-        There are no tasks here! Click the add button to create a new task.
+        There are no exerciess here! Click the "+" button to create a new
+        exercise.
       </h3>
       <h3 class="no-content-title" *ngIf="!exercises">
-        Choose list in sidebar.
+        Choose Muscle Group in sidebar.
       </h3>
 
       <button

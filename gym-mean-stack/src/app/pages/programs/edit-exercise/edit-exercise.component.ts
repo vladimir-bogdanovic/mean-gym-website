@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RequestsService } from '../../../services/requests.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import {
@@ -7,6 +7,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-edit-exercise',
@@ -15,11 +16,13 @@ import {
   templateUrl: './edit-exercise.component.html',
   styleUrl: './edit-exercise.component.scss',
 })
-export class EditExerciseComponent implements OnInit {
+export class EditExerciseComponent implements OnInit, OnDestroy {
   programId!: string;
   muscleGroupId!: string;
   exerciseId!: string;
+
   exerciseForm!: FormGroup;
+  private exercisesSubscription: Subscription = new Subscription();
 
   constructor(
     private requestsService: RequestsService,
@@ -47,7 +50,9 @@ export class EditExerciseComponent implements OnInit {
       this.exerciseId,
       this.exerciseForm.value.exerciseName
     );
-    this.requestsService.getExercisesStream().subscribe();
+    this.exercisesSubscription = this.requestsService
+      .getExercisesStream()
+      .subscribe();
     this.router.navigate([
       `programs/${this.programId}/mg-lists/${this.muscleGroupId}/exercises`,
     ]);
@@ -57,5 +62,9 @@ export class EditExerciseComponent implements OnInit {
     this.router.navigate([
       `programs/${this.programId}/mg-lists/${this.muscleGroupId}/exercises`,
     ]);
+  }
+
+  ngOnDestroy(): void {
+    this.exercisesSubscription.unsubscribe();
   }
 }

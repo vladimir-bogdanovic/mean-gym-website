@@ -24,15 +24,12 @@ export class NewProgramComponent implements OnInit {
 
   programForm!: FormGroup;
   imageData!: string;
-  defaultImg: string =
-    'https://variety.com/wp-content/uploads/2023/04/Twitter-Logo-Doge-Dogecoin.png';
 
   ngOnInit(): void {
     this.programForm = new FormGroup({
       name: new FormControl(null),
       image: new FormControl(null),
     });
-    //  this.imageData = this.defaultImg;
   }
 
   onSubmit() {
