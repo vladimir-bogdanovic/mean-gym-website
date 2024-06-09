@@ -8,6 +8,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { NgIf } from '@angular/common';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-new-program',
@@ -19,6 +20,7 @@ import { NgIf } from '@angular/common';
 export class NewProgramComponent implements OnInit {
   constructor(
     private requestsService: RequestsService,
+    private authService: AuthService,
     private router: Router
   ) {}
 
@@ -62,5 +64,9 @@ export class NewProgramComponent implements OnInit {
     } else {
       console.log('No file selected');
     }
+  }
+
+  goBackToPrograms() {
+    this.router.navigate(['programs']);
   }
 }

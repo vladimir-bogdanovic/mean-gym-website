@@ -1,33 +1,27 @@
-import {
-  Component,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RequestsService } from '../../../services/requests.service';
 import { ProgramInterface } from '../../../models/program.model';
 import { NgFor, NgIf } from '@angular/common';
-import { StringToImagePipe } from '../../../pipes/string-to-image.pipe';
 import { Subscription } from 'rxjs';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-programs-page',
   standalone: true,
-  imports: [NgFor, NgIf, StringToImagePipe],
+  imports: [NgFor, NgIf],
   templateUrl: './programs-page.component.html',
   styleUrl: './programs-page.component.scss',
 })
 export class ProgramsPageComponent implements OnInit, OnDestroy {
   programs!: ProgramInterface[];
   private programsSubscription!: Subscription;
-  muscleGroupsSubscription!: Subscription;
-  exercisesSubscription!: Subscription;
 
   constructor(
     private router: Router,
-    private requestsService: RequestsService
+    private requestsService: RequestsService,
+    private authService: AuthService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -41,7 +35,7 @@ export class ProgramsPageComponent implements OnInit, OnDestroy {
   }
 
   addNewProgram() {
-    this.router.navigate(['new-program']);
+    this.router.navigate(['/new-program']);
   }
 
   goToSelectedProgram(programId: string | undefined) {

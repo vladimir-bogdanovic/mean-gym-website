@@ -1,15 +1,15 @@
 <div class="header-container">
   <div class="navigation-container">
-    <a class="navbar-item"> Home </a>
-    <a class="navbar-item"> Programs </a>
-    <a class="navbar-item"> Exercises </a>
+    <a class="navbar-item" (click)="goToHomePage()"> Home </a>
+    <a class="navbar-item" (click)="goToProgramsPage()"> Programs </a>
+    <a class="navbar-item" (click)="goToExercisesPage()"> Exercises </a>
   </div>
 
   <div *ngIf="!loggedIn" class="auth-container">
-    <a class="navbar-item"> Signup </a>
-    <a class="navbar-item"> Login </a>
+    <a class="navbar-item" (click)="goToSignupPage()"> Signup </a>
+    <a class="navbar-item" (click)="goToLoginPage()"> Login </a>
   </div>
   <div *ngIf="loggedIn" class="auth-container">
-    <a class="navbar-item"> Logout </a>
+    <a class="navbar-item" (click)="logout()"> Logout </a>
   </div>
 </div>

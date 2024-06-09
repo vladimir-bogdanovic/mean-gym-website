@@ -6,6 +6,7 @@ import { MuscleGroupInterface } from '../../../models/muscle-group.model';
 import { ExerciseInterface } from '../../../models/exercise.model';
 import { ProgramInterface } from '../../../models/program.model';
 import { Subscription, switchMap } from 'rxjs';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-program-view',
@@ -17,6 +18,7 @@ import { Subscription, switchMap } from 'rxjs';
 export class ProgramViewComponent implements OnInit, OnDestroy {
   constructor(
     private requestsService: RequestsService,
+    private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -60,7 +62,7 @@ export class ProgramViewComponent implements OnInit, OnDestroy {
               this.muscleGroupTitle = muscleGroups.title;
             }
           });
-          console.log(this.muscleGroups);
+          // console.log(this.muscleGroups);
         });
 
       if ((this.muscleGroupId = params?.['mgListId'])) {

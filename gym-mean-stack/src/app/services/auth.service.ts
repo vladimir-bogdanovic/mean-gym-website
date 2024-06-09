@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { RequestsService } from './requests.service';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { shareReplay, tap } from 'rxjs';
 
 @Injectable({

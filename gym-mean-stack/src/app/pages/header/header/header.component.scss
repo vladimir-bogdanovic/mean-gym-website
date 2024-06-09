@@ -28,4 +28,16 @@
     flex-direction: row;
     flex-wrap: wrap;
   }
+
+  .navbar-item {
+    color: white;
+    background-color: $purple-blue;
+    margin: 0 5px;
+    border-radius: 4px;
+  }
+
+  .navbar-item:hover {
+    background-color: $dark-blue;
+    box-shadow: 1px 1px 5px 0px #cbc2ba;
+  }
 }
