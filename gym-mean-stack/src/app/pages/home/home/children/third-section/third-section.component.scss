@@ -1,0 +1,102 @@
+.wrapper {
+  margin-bottom: 100px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.slider-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: green;
+  width: 75%;
+  height: 100%;
+
+  .title {
+    width: 400px;
+    background-color: aliceblue;
+  }
+
+  .divider {
+    width: 500px;
+    height: 3px;
+    background-color: aliceblue;
+  }
+
+  .arrow-buttons {
+    display: flex;
+    justify-content: center;
+    width: 100px;
+    background-color: aqua;
+
+    .left-button {
+      margin: 0 10px;
+    }
+  }
+}
+
+.cards-container {
+  width: 75%;
+  height: 300px;
+  background-color: yellowgreen;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 10px;
+  overflow-y: hidden;
+
+  .single-card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 350px;
+    height: 100%;
+    background-color: chocolate;
+    margin: 10px;
+
+    .image-container {
+      height: 65%;
+      width: 100%;
+      background-color: antiquewhite;
+    }
+
+    .info-container {
+      height: 35%;
+      width: 100%;
+      background-color: violet;
+
+      .info-title {
+        width: 100%;
+        height: 55%;
+        display: flex;
+        align-items: center;
+
+        .class-name {
+          margin-left: 15px;
+        }
+      }
+
+      .info-text {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        width: 100%;
+        height: 45%;
+
+        font-size: 15px;
+
+        .icon-div {
+          margin-right: 10px;
+          margin-left: 15px;
+        }
+      }
+    }
+  }
+}

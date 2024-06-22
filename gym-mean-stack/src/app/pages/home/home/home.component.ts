@@ -1,11 +1,18 @@
 import { NgClass, NgFor, NgStyle } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { SecondSectionComponent } from './children/second-section/second-section.component';
+import { ThirdSectionComponent } from './children/third-section/third-section.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NgFor, NgStyle, NgClass, SecondSectionComponent],
+  imports: [
+    NgFor,
+    NgStyle,
+    NgClass,
+    SecondSectionComponent,
+    ThirdSectionComponent,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
