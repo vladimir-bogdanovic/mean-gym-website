@@ -1,0 +1,38 @@
+<div class="wrapper">
+  <div class="carousel">
+    <div class="overlay">
+      <h1><span>BUILD</span> YOUR BODY <span>STRONG</span></h1>
+      <P>Ready to change your physique, embrace the grind!</P>
+
+      <div>
+        <div (click)="goToPrevious()" class="leftArrow">
+          <i class="fa-solid fa-chevron-left"></i>
+        </div>
+        <div (click)="goToNext()" class="rightArrow">
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </div>
+      <div class="dotsContainer">
+        <div
+          *ngFor="let slide of slides; let slideIndex = index"
+          class="dot"
+          [ngClass]="imageIndex === slideIndex ? 'active' : ''"
+          (click)="goToSlide(slideIndex)"
+        >
+          <i class="fa-regular fa-circle"></i>
+        </div>
+      </div>
+    </div>
+    <div class="slider">
+      <div class="slide">
+        <img [src]="slides[imageIndex].url" [alt]="slides[imageIndex].image" />
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER CE BITI STICKY A FOOTER FIXED -->
+  <!-- ISPOD 500 PX SKINI STRELICE  -->
+  <!-- dodati tranzicuju na slidove (slika i text) -->
+  <second-section></second-section>
+  <third-section></third-section>
+</div>

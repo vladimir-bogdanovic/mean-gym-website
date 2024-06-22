@@ -1,0 +1,32 @@
+<div class="wrapper">
+  <div class="slider-container">
+    <div class="title">FEATURED CLASSES</div>
+    <div class="divider"></div>
+    <div class="arrow-buttons">
+      <div class="left-button">
+        <button (click)="prev()">L</button>
+      </div>
+      <div class="right-button">
+        <button (click)="next()">R</button>
+      </div>
+    </div>
+  </div>
+  <div class="cards-container">
+    <div *ngFor="let class of visibleImages" class="single-card-container">
+      <div class="image-container">
+        <img [src]="class.url" alt="" />
+      </div>
+      <div class="info-container">
+        <div class="info-title">
+          <div class="class-name">{{ class.image }}</div>
+        </div>
+        <div class="info-text">
+          <div class="icon-div">
+            <i class="fa-solid fa-user" style="color: #ff4500"></i>
+          </div>
+          {{ class.trainers }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

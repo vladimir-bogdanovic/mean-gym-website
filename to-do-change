@@ -1,0 +1,8 @@
+# naa inputee za programe da se doda opcija za : grupeMisisca, vezbe u toj grupi
+# (dropdown button povezan sa input poljem) lazy loadining na slike cela
+# rekonstrukcija pograms strane (raddnaa logka ostaje istta) exercises strrna lazy
+# loaadinng i da se filter sredi exercise page- u filteru ukloniti scroll u
+# program strani ukloniti user programs ako user nije ulogovan program page -
+# napraviti defoltno program u home srediti drugu sekciju i ubaciti BMI zameniti
+# heder u futer (header sticky a futer fixiran)
+# proveriti zasto nekeeslike nestaju u programss pocetnoj strani poslle nekog vremena

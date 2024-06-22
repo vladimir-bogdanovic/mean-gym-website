@@ -11,17 +11,22 @@ import { EditMuscleGroupComponent } from './pages/programs/edit-muscle-group/edi
 import { EditExerciseComponent } from './pages/programs/edit-exercise/edit-exercise.component';
 import { ExercisesComponent } from './pages/exercises/exercises.component';
 import { DropdownSubmenuComponent } from './pages/exercises/dropdown-submenu/dropdown-submenu/dropdown-submenu.component';
+import { HomeComponent } from './pages/home/home/home.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'signup', component: SignupComponent },
   { path: 'login', component: LoginComponent },
+  ///////// programs
   { path: 'programs', component: ProgramsPageComponent },
   {
     path: 'programs/:programId/mg-lists',
     component: ProgramViewComponent,
   },
-  { path: 'new-program', component: NewProgramComponent },
+  {
+    path: 'new-program',
+    component: NewProgramComponent,
+  },
   {
     path: 'programs/:programId/new-muscle-group',
     component: NewMuscleGroupComponent,
@@ -50,9 +55,15 @@ export const routes: Routes = [
     path: 'programs/:programId/mg-lists/:mgListId/exercises/:exerciseId/edit-exercise',
     component: EditExerciseComponent,
   },
+  ///////// exercises
   {
     path: 'exercises',
     component: ExercisesComponent,
   },
   { path: 'test', component: DropdownSubmenuComponent },
+  ///////// home
+  { path: 'home', component: HomeComponent },
 ];
+
+// dodati ** rutu
+// na kraju odraditi guard na neke rute

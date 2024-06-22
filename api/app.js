@@ -178,7 +178,7 @@ app.post("/programs", authenticate, storage, async (req, res) => {
 
     const imagePath = req.file
       ? `http://localhost:3000/images/${req.file.filename}`
-      : `http://localhost:3000/images/default-image.jpg`;
+      : `http://localhost:3000/images/default-images/default-image.jpg`;
 
     let newProgram = new Program({
       title: title,

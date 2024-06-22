@@ -10,7 +10,7 @@ import { GymApiExerciseInterface } from '../../../../models/gym-api-exercise.mod
   templateUrl: './dropdown-submenu.component.html',
   styleUrl: './dropdown-submenu.component.scss',
 })
-export class DropdownSubmenuComponent implements OnInit {
+export class DropdownSubmenuComponent {
   @Input() title!: string;
   @Input() submenuOption!: string[];
   @Output() FilteredData = new EventEmitter<GymApiExerciseInterface[]>();
@@ -40,10 +40,6 @@ export class DropdownSubmenuComponent implements OnInit {
           console.log('Data found:', resData);
         }
       });
-  }
-
-  ngOnInit(): void {
-    console.log(this.submenuOption);
   }
 
   onFilterOptionEnter() {
