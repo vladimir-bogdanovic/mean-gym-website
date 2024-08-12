@@ -6,8 +6,10 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { NgIf } from '@angular/common';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-edit-program',
@@ -26,16 +28,24 @@ export class EditProgramComponent implements OnInit {
   programForm!: FormGroup;
   imageData!: string;
   programId!: string;
+  formIsSubmitted: boolean = false;
 
   ngOnInit(): void {
     this.programForm = new FormGroup({
-      name: new FormControl(null),
+      name: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(4),
+        Validators.maxLength(25),
+        Validators.pattern('^[a-zA-Z0-9 ]+$'),
+      ]),
       image: new FormControl(null),
     });
 
     this.route.params.subscribe((params: Params) => {
       this.programId = params?.['programId'];
     });
+
+    this.formIsSubmitted = false;
   }
 
   onSubmit() {
@@ -46,9 +56,24 @@ export class EditProgramComponent implements OnInit {
     );
     this.programForm.reset();
     this.imageData = null!;
+    this.formIsSubmitted = true;
+  }
 
+  onEnter(event: Event) {
+    if (!this.programForm.valid) {
+      event.preventDefault();
+    }
+  }
+
+  goToProgramsPage() {
     this.router.navigate(['/programs']);
   }
+
+  goToCurrentProgram() {
+    // nmmg da zaobidjem ovo nikako/ za sad neka ceka
+    this.router.navigate([`/programs/${this.programId}/mg-list`]);
+  }
+
   onFileSelected(event: Event) {
     const allowedFileTypes = ['image/png', 'image/jpeg', 'image/jpg'];
     const input = event.target as HTMLInputElement;

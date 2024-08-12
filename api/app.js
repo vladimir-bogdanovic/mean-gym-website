@@ -210,7 +210,7 @@ app.patch("/programs/:programId", authenticate, storage, async (req, res) => {
   try {
     const imagePath = req.file
       ? `http://localhost:3000/images/${req.file.filename}`
-      : `http://localhost:3000/images/default-image.jpg`;
+      : `http://localhost:3000/images/default-images/default-image.jpg`;
     const updatedProgram = await Program.findOneAndUpdate(
       {
         _id: req.params.programId,

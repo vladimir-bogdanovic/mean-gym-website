@@ -1,8 +1,9 @@
 @import "../../../../main-styles.scss";
 
 .dropdown-items {
-  max-height: 300px; /* Set a fixed height for the container */
-  overflow-y: scroll;
+  max-height: 300px;
+  overflow: hidden;
+  overflow-y: overlay;
 }
 
 .filter-submenu {
@@ -12,7 +13,7 @@
   justify-content: start;
   align-items: start;
   flex-wrap: wrap;
-  list-style-type: none; /* Remove default list styles */
+  list-style-type: none;
 }
 
 .filter-submenu.show {
@@ -26,6 +27,10 @@
   width: 290px;
   max-width: 350px;
   border-bottom: solid 1px black;
+
+  ul {
+    cursor: pointer;
+  }
 }
 
 // add transition to hover

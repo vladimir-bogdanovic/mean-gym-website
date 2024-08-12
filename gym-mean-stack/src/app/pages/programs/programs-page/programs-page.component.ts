@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { RequestsService } from '../../../services/requests.service';
 import { ProgramInterface } from '../../../models/program.model';
 import { NgFor, NgIf } from '@angular/common';
-import { Subscription } from 'rxjs';
-import { AuthService } from '../../../services/auth.service';
+import { Subscription, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-programs-page',
@@ -15,23 +14,35 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class ProgramsPageComponent implements OnInit, OnDestroy {
   programs!: ProgramInterface[];
-  private programsSubscription!: Subscription;
+  programsSubscription!: Subscription;
 
   constructor(
     private router: Router,
-    private requestsService: RequestsService,
-    private authService: AuthService,
-    private route: ActivatedRoute
+    private requestsService: RequestsService
   ) {}
 
   ngOnInit(): void {
     this.requestsService.getPrograms();
+    // this.programsSubscription = this.requestsService
+    //   .getProgramsStream()
+    //   .pipe(switchMap(() => this.requestsService.getProgramsStream()))
+    //   .subscribe((programs: ProgramInterface[]) => {
+    //     this.programs = programs;
+    //     console.log(programs);
+    //   });
+
     this.programsSubscription = this.requestsService
       .getProgramsStream()
       .subscribe((programs: ProgramInterface[]) => {
         this.programs = programs;
-        console.log(this.programs);
       });
+
+    // this.muscleGroupsSubscription = this.requestsService
+    // .getMuscleGroupsStream()
+    // .pipe(switchMap(() => this.requestsService.getMuscleGroupsStream()))
+    // .subscribe((muscleGroups: MuscleGroupInterface[]) => {
+    //   this.muscleGroups = muscleGroups;
+    // });
   }
 
   addNewProgram() {

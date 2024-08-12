@@ -103,8 +103,10 @@ export class ExercisesComponent implements OnInit {
 
   renderFilteredData(dataFromChild: GymApiExerciseInterface[]) {
     //console.log(dataFromChild);
+    console.log(dataFromChild[0].Muscles);
     this.exercises = dataFromChild;
     this.exerciseSubject.next(this.exercises);
+    this.currentPage = 1;
     // console.log(this.exerciseSubject);
     //console.log(this.exercises);
   }

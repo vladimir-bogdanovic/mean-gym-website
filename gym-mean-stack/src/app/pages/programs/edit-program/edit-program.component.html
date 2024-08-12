@@ -27,13 +27,40 @@
   <div class="centered-content">
     <div class="white-box">
       <h1 class="title">Edit program</h1>
-      <form [formGroup]="programForm" (submit)="onSubmit()">
+      <form
+        [formGroup]="programForm"
+        (submit)="onSubmit()"
+        (keydown.enter)="onEnter($event)"
+      >
         <input
           class="input has-background-light is-medium"
           type="text"
           formControlName="name"
           placeholder="Enter program name..."
         />
+        <div
+          class="form-warning-container"
+          *ngIf="
+            programForm.get('name')?.hasError('maxlength') ||
+            programForm.get('name')?.hasError('minlength')
+          "
+        >
+          <p class="form-warning">
+            The input must be between 4 and 25 characters long.
+          </p>
+        </div>
+        <div
+          class="form-warning-container"
+          *ngIf="programForm.get('name')?.hasError('pattern')"
+        >
+          <p class="form-warning">Only letters and numbers are allowed.</p>
+        </div>
+        <div
+          class="form-warning-container"
+          *ngIf="programForm.get('name')?.pristine"
+        >
+          <p class="form-warning">Program name required.</p>
+        </div>
         <div class="upload-img-container">
           <input
             class="input-image"
@@ -51,12 +78,35 @@
         </div>
         <br /><br />
         <div class="buttons is-right">
-          <button class="button is-medium">Cancel</button>
-          <button type="submit" class="button is-info has-text-white is-medium">
+          <button
+            type="button"
+            class="button is-medium"
+            (click)="goToProgramsPage()"
+          >
+            Cancel
+          </button>
+          <button
+            [disabled]="!programForm.valid"
+            type="submit"
+            class="button is-info has-text-white is-medium"
+          >
             Edit
           </button>
         </div>
       </form>
     </div>
+  </div>
+</div>
+
+<div class="pop-up-modal" *ngIf="formIsSubmitted === true">
+  <div class="modal-text">
+    <h2>
+      You has successfully edited the program information. <br />
+      Back to programs page.
+    </h2>
+  </div>
+  <div class="modal-buttons">
+    <button (click)="goToProgramsPage()">Programs page</button>
+    <!-- <button (click)="goToCurrentProgram()">Current program</button> -->
   </div>
 </div>

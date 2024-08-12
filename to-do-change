@@ -1,8 +1,31 @@
 # naa inputee za programe da se doda opcija za : grupeMisisca, vezbe u toj grupi
+
 # (dropdown button povezan sa input poljem) lazy loadining na slike cela
+
 # rekonstrukcija pograms strane (raddnaa logka ostaje istta) exercises strrna lazy
+
 # loaadinng i da se filter sredi exercise page- u filteru ukloniti scroll u
+
 # program strani ukloniti user programs ako user nije ulogovan program page -
+
 # napraviti defoltno program u home srediti drugu sekciju i ubaciti BMI zameniti
+
 # heder u futer (header sticky a futer fixiran)
+
 # proveriti zasto nekeeslike nestaju u programss pocetnoj strani poslle nekog vremena
+
+<!-- u filter stranici za vezbe - kada user izabere filter opciju prebaciti ga na prvu stranu rezultata po defoltu -->
+
+kada se registrujemo navigacija ne salje na home page
+
+button za dodavanje novog program nema marginu
+
+login/signup i logout nije responsive
+
+cancel na stranicama
+
+u auth formama dodati warning/error za nevazecu sifru
+
+kada editujemo program, u slucaju kada dodajemo sliku na submit forme umesto da edituje program dodaje se novi program ali kada se refresuje strana sve je ok (slika zeza) ======>
+====>  validatori i popup obavestenja i kada se submituje forma modal koji sadrzi poruku i redirekciju na programs page ili na editovan program
+enter preskace validaciju / treba da se disable

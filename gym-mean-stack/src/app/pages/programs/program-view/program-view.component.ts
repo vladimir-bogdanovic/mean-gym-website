@@ -103,6 +103,7 @@ export class ProgramViewComponent implements OnInit, OnDestroy {
       .subscribe((muscleGroups: MuscleGroupInterface[]) => {
         this.muscleGroups = muscleGroups;
       });
+    this.router.navigate([`programs/${this.programId}/mg-lists`]);
   }
 
   editExercicse(exerciseId: string | undefined) {
